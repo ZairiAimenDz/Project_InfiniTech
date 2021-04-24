@@ -367,3 +367,6 @@ MigrationBackup/
 FodyWeavers.xsd
 /InfiniTech/Data/Migrations/20210424143726_initialmigration.cs
 /InfiniTech/Data/Migrations/20210424143726_initialmigration.Designer.cs
+/InfiniTech/Data/Migrations/20210424172404_added_favorite.cs
+/InfiniTech/Data/Migrations
+/InfiniTech/Migrations

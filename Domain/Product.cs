@@ -21,6 +21,7 @@ namespace Domain
         public Brand Brand { get; set; }
         public Guid BrandId { get; set; }
         //
+
         public int NumberInStock { get; set; }
         public bool isStockUnlimited { get; set; }
     }

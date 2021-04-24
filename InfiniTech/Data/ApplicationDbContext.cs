@@ -19,12 +19,14 @@ namespace InfiniTech.Data
         {
             base.OnModelCreating(builder);
             builder.Entity<OrderedProducts>().HasKey(t => new {t.OrderId,t.ProductId });
+            builder.Entity<UserLikesProduct>().HasKey(t => new {t.ApplicationUserId,t.ProductId });
         }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<UserLikesProduct> UserLikedProducts { get; set; }
         public DbSet<OrderedProducts> OrderedProducts { get; set; }
         public DbSet<Laptop> Laptops{ get; set; }
         public DbSet<Smartphone> Smartphones { get; set; }

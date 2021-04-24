@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Domain
 {
+    [Table("ProductCategories")]
     public class Category
     {
         public Guid Id { get; set; }
@@ -15,6 +16,6 @@ namespace Domain
         public Guid ParentCategoryId { get; set; }*/
         
         // Navigation Property
-        public List<Product> Products { get; set; }
+        public List<Product> CategoryProducts { get; set; }
     }
 }
