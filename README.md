@@ -23,7 +23,7 @@ dotnet ef migrations add {Migration  Title}
 Make Sure The Title is Unique Each Time You Do A Change To The Database
 
 
-### **To Update The Database : **
+### **To Update The Database :**
 ```
 dotnet ef database update
 ```
