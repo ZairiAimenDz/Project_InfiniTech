@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Products;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,5 +26,7 @@ namespace InfiniTech.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderedProducts> OrderedProducts { get; set; }
+        public DbSet<Laptop> Laptops{ get; set; }
+        public DbSet<Smartphone> Smartphones { get; set; }
     }
 }
