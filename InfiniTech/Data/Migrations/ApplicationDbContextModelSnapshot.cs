@@ -116,12 +116,7 @@ namespace InfiniTech.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ParentCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -399,17 +394,6 @@ namespace InfiniTech.Data.Migrations
                         .HasColumnName("Smartphone_Storage");
 
                     b.HasDiscriminator().HasValue("Smartphone");
-                });
-
-            modelBuilder.Entity("Domain.Category", b =>
-                {
-                    b.HasOne("Domain.Category", "ParentCategory")
-                        .WithMany()
-                        .HasForeignKey("ParentCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ParentCategory");
                 });
 
             modelBuilder.Entity("Domain.OrderedProducts", b =>
