@@ -1,5 +1,7 @@
+using Application.Interfaces;
 using Domain;
 using InfiniTech.Data;
+using InfiniTech.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,6 +38,10 @@ namespace InfiniTech
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IBrandRepository, BrandRepository>();
+
             services.AddControllersWithViews();
             services.AddServerSideBlazor();
         }
