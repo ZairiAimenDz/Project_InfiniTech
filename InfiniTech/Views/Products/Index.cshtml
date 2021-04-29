@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Domain.Product>
+﻿@model Application.Wrappers.PagedList<Domain.Product>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,22 +13,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.First().Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.First().Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.First().Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Brand)
+                @Html.DisplayNameFor(model => model.First().Brand)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumberInStock)
+                @Html.DisplayNameFor(model => model.First().NumberInStock)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.isStockUnlimited)
+                @Html.DisplayNameFor(model => model.First().isStockUnlimited)
             </th>
             <th></th>
         </tr>
