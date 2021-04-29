@@ -53,7 +53,11 @@ namespace InfiniTech.Repositories
             }
 
             var collection = _context.Brands as IQueryable<Brand>;
-
+            // Filtering By Brand Name :
+            collection = string.IsNullOrEmpty(parameters.BrandName) ? collection :
+                            collection.Where(b => b.Name.ToLower()
+                                    .Contains(parameters.BrandName.ToLower()));
+            // If Statement That Check If The Brand We Are Looking For Exists, If Not Return The Full List
 
             return await PagedList<Brand>.CreateAsync(collection,
                 parameters.PageNumber,

@@ -7,6 +7,5 @@ namespace Application.Dtos.Category
 {
     public class CategoryParameters : BasePaginationParameters
     {
-        public string Name { get; set; }
     }
 }

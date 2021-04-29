@@ -46,19 +46,11 @@ namespace InfiniTech.Repositories
             return _context.Categories.FirstOrDefaultAsync(c => c.Id == categid);
         }
 
-        public async Task<PagedList<Category>> GetCategoryList(CategoryParameters parameters)
+        public async Task<IEnumerable<Category>> GetCategoryList()
         {
-            if (parameters == null)
-            {
-                return null;
-            }
-
             var collection = _context.Categories as IQueryable<Category>;
 
-
-            return await PagedList<Category>.CreateAsync(collection,
-                parameters.PageNumber,
-                parameters.PageSize);
+            return await collection.ToListAsync();
         }
 
         public bool Save()
