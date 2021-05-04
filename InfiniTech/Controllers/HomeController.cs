@@ -1,4 +1,6 @@
-﻿using InfiniTech.Models;
+﻿using Application.Dtos.Product;
+using Application.Interfaces;
+using InfiniTech.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,15 +14,18 @@ namespace InfiniTech.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IProductRepository repository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,IProductRepository repository)
         {
             _logger = logger;
+            this.repository = repository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var products = await repository.GetProductsList(new ProductParameters());
+            return View(products);
         }
 
         public IActionResult Privacy()

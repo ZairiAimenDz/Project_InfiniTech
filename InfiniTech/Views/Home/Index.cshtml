@@ -1,8 +1,35 @@
-﻿@{
+﻿@model Application.Wrappers.PagedList<Domain.Product>  
+@{
     ViewData["Title"] = "Home Page";
 }
+
+@foreach (var item in Model)
+{
+    <component type="typeof(InfiniTech.Components.ProductCard)" render-mode="ServerPrerendered"
+               param-name='@item.Name'  param-price="@item.Price"
+               param-ProductImgURL='@item.ThumbnailURL'
+               param-Category='@item.Category.Name'
+               param-Description='@item.ShortDescription' />
+}
+
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+*@
