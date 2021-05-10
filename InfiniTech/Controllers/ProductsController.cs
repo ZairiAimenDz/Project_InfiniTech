@@ -9,9 +9,11 @@ using Domain;
 using InfiniTech.Data;
 using Application.Interfaces;
 using Application.Dtos.Product;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InfiniTech.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;

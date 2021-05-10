@@ -5,7 +5,7 @@
     </div>
     <div class="product-details">
         <span class="product-catagory">@Category</span>
-        <h4><a href="">@Name</a></h4>
+        <h4 class="description mb-1"><a href="">@Name</a></h4>
         <p class="description">@Description</p>
         <div class="product-bottom-details">
             <div class="product-price">@if (OldPrice != 0)
@@ -31,6 +31,7 @@
     }
 
     .product-card {
+        margin:.5em;
         width: 16em;
         position: relative;
         box-shadow: 0 1px 1px #dfdfdf;
@@ -88,8 +89,6 @@
 
     .product-details h4 a {
         font-weight: 500;
-        display: block;
-        margin-bottom: 18px;
         color: #363636;
         text-decoration: none;
         transition: 0.3s;

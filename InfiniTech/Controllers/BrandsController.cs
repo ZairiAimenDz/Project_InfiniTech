@@ -9,9 +9,11 @@ using Domain;
 using InfiniTech.Data;
 using Application.Interfaces;
 using Application.Dtos.Brand;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InfiniTech.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("admin/[controller]")]
     public class BrandsController : Controller
     {

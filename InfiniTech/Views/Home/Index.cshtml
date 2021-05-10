@@ -1,35 +1,73 @@
-﻿@model Application.Wrappers.PagedList<Domain.Product>  
+﻿@model Application.Wrappers.PagedList<Domain.Product>
 @{
     ViewData["Title"] = "Home Page";
 }
 
-@foreach (var item in Model)
-{
-    <component type="typeof(InfiniTech.Components.ProductCard)" render-mode="ServerPrerendered"
-               param-name='@item.Name'  param-price="@item.Price"
-               param-ProductImgURL='@item.ThumbnailURL'
-               param-Category='@item.Category.Name'
-               param-Description='@item.ShortDescription' />
-}
 
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mb-3">
+    <div class="categories row" style="padding: 16px 0 16px 0;">
+        <div class="col-sm-4 col-md-2 p-2">
+            <div class="single-category">
+                <a href="http://">
+                    <div class="single-category-icon"><i class="fas fa-laptop"></i></div>
+                    <div class="single-category-title">Laptops & Tablets</div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-2 p-2">
+            <div class="single-category">
+                <a href="http://">
+                    <div class="single-category-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <div class="single-category-title">Smartphones & GPS</div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-2 p-2">
+            <div class="single-category">
+                <a href="http://">
+                    <div class="single-category-icon"><i class="fas fa-desktop"></i></div>
+                    <div class="single-category-title">Desktop</div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-2 p-2">
+            <div class="single-category">
+                <a href="http://">
+                    <div class="single-category-icon"><i class="fas fa-microchip"></i></div>
+                    <div class="single-category-title">Computer hardware</div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-2 p-2">
+            <div class="single-category">
+                <a href="http://">
+                    <div class="single-category-icon"><i class="fas fa-print"></i></div>
+                    <div class="single-category-title">Peripheral devices</div>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-2 p-2">
+            <div class="single-category">
+                <a href="http://">
+                    <div class="single-category-icon"><i class="fas fa-gamepad"></i></i></div>
+                    <div class="single-category-title">Games & devices</div>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*
-*@
+<div class="mb-2" style="display:flex;">
+    <h3 class="flex-grow-1">Recommended Products</h3>
+    <a class="text-right" href="#">View All</a>
+</div>
+<div style="display:flex;flex-wrap:wrap;">
+    @foreach (var item in Model.Take(4))
+    {
+        <component type="typeof(InfiniTech.Components.ProductCard)" render-mode="ServerPrerendered"
+                   param-name='@item.Name' param-price="@item.Price"
+                   param-ProductImgURL='@item.ThumbnailURL'
+                   param-Category='@item.Category.Name'
+                   param-Description='@item.ShortDescription' />
+    }
+</div>

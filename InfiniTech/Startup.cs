@@ -25,6 +25,7 @@ namespace InfiniTech
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /// Data Providers Configuration
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -38,16 +39,21 @@ namespace InfiniTech
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
 
+            /// MVC Config
             services.AddControllersWithViews();
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
+
+            /// API Config
             services.AddApiVersioning(config =>
             {
                 config.DefaultApiVersion = ApiVersion.Default;
                 config.AssumeDefaultVersionWhenUnspecified = true; 
                 config.ReportApiVersions = true;
             });
+
+            /// Componenets Config
             services.AddServerSideBlazor();
         }
 

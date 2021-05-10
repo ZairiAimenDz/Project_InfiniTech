@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Domain;
 using InfiniTech.Data;
 using Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InfiniTech.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
         private readonly ICategoryRepository _repository;
