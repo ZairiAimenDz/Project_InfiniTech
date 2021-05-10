@@ -61,7 +61,7 @@
     <h3 class="flex-grow-1">Recommended Products</h3>
     <a class="text-right" href="#">View All</a>
 </div>
-<div style="display:flex;flex-wrap:wrap;">
+<div style="display: grid;grid-template-columns: repeat(auto-fit, minmax(min(100%, 17em), 1fr));">
     @foreach (var item in Model.Take(4))
     {
         <component type="typeof(InfiniTech.Components.ProductCard)" render-mode="ServerPrerendered"
