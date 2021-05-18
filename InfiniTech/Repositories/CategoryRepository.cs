@@ -48,7 +48,7 @@ namespace InfiniTech.Repositories
 
         public async Task<IEnumerable<Category>> GetCategoryList()
         {
-            var collection = _context.Categories as IQueryable<Category>;
+            var collection = _context.Categories.OrderBy(c => c.Name) as IQueryable<Category>;
 
             return await collection.ToListAsync();
         }

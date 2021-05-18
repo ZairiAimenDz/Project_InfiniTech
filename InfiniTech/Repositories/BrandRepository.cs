@@ -52,7 +52,7 @@ namespace InfiniTech.Repositories
                 return null;
             }
 
-            var collection = _context.Brands as IQueryable<Brand>;
+            var collection = _context.Brands.OrderBy(b=>b.Name) as IQueryable<Brand>;
             // Filtering By Brand Name :
             collection = string.IsNullOrEmpty(parameters.BrandName) ? collection :
                             collection.Where(b => b.Name.ToLower()
