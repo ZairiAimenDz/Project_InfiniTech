@@ -55,7 +55,7 @@ namespace InfiniTech.Repositories
                 return null;
             }
 
-            var collection = _context.Products.Include(p=>p.Brand).Include(p=>p.Category) as IQueryable<Product>;
+            var collection = _context.Products.OrderByDescending(p=>p.DateAdded).Include(p=>p.Brand).Include(p=>p.Category) as IQueryable<Product>;
             // Filtering By The Entered Details :
             // By Name :
             collection = string.IsNullOrEmpty(parameters.name) ? collection :
