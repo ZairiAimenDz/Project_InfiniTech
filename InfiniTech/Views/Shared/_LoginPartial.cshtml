@@ -8,7 +8,7 @@
         @if (User.IsInRole("Admin"))
         { 
             <li class="nav-item active">
-                <a class="nav-link" asp-controller="Brands" asp-action="Index"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <a class="nav-link" asp-controller="Admin" asp-action="Index"><i class="fas fa-chart-line"></i> Dashboard</a>
             </li>
         }
         <li class="nav-item active">
@@ -23,7 +23,7 @@
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i> Login</a>
         </li>
     }
     <li class="nav-item active">

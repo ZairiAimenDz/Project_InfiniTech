@@ -27,6 +27,7 @@ namespace InfiniTech.Repositories
 
         public async Task AddProductAsync(Product product)
         {
+            product.DateAdded = DateTime.Now;
             await _context.Products.AddAsync(product);
         }
 

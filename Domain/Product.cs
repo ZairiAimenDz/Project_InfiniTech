@@ -12,6 +12,7 @@ namespace Domain
         public string Description { get; set; }
         public string ShortDescription { get; set; }
         public string ThumbnailURL { get; set; }
+        public DateTime DateAdded { get; set; }
         // Foreign Key For Category
         public Category Category { get; set; }
         public Guid CategoryId { get; set; }
