@@ -1,0 +1,27 @@
+﻿@model Domain.Product
+
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="row mb-5">
+    <div class="col-6 p-4">
+        <h4 class="font-weight-lighter">@Html.DisplayFor(model => model.Category.Name) - @Html.DisplayFor(model => model.Brand.Name)</h4>
+        <hr class="my-3" />
+        <h3 class="mb-4 font-weight-bolder">@Html.DisplayFor(model => model.Name)</h3>
+        <p class="mb-3">@Html.DisplayFor(model => model.ShortDescription)</p>
+        <p class="text-danger">@Html.DisplayFor(model => model.Price) $</p>
+        <a class="btn btn-warning" href="#">Order Product @if (!Model.isStockUnlimited) {
+            @("( " + Model.NumberInStock + " Left )")
+        }</a>
+    </div>
+    <div class="col-6">
+        <img class="w-100 my-auto" src="@Model.ThumbnailURL"/>
+    </div>
+</div>
+
+<div class="p-3">
+    <h3>Description</h3>
+    <p class="mb-3">@Html.DisplayFor(model => model.Description)</p>
+</div>

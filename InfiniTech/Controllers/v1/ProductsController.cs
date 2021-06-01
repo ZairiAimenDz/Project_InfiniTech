@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace InfiniTech.Controllers.v1
 {
-    [Route("api/[Controller]")]
+    [Route("api/Products")]
     [ApiVersion("1.0")]
     [ApiController]
     public class ProductsController : ControllerBase

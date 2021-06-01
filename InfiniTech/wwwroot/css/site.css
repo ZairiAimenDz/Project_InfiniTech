@@ -12,6 +12,10 @@ a {
   color: #0366d6;
 }
 
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
@@ -27,7 +31,7 @@ a {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 @media (min-width: 768px) {
   html {

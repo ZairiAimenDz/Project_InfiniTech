@@ -10,12 +10,6 @@ namespace Domain
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-
-/*        public Category ParentCategory { get; set; }
-        [ForeignKey("ParentCategoryId")]
-        public Guid ParentCategoryId { get; set; }*/
-        
-        // Navigation Property
         public List<Product> CategoryProducts { get; set; }
     }
 }

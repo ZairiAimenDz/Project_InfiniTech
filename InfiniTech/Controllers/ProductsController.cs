@@ -66,7 +66,7 @@ namespace InfiniTech.Controllers
         {
             if (ModelState.IsValid)
             {
-                product.id = Guid.NewGuid();
+                product.ID = Guid.NewGuid();
                 await repository.AddProductAsync(product);
                 await repository.SaveAsync();
                 return RedirectToAction(nameof(Index));
@@ -99,9 +99,9 @@ namespace InfiniTech.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("id,Name,Price,Description,ShortDescription,ThumbnailURL,CategoryId,BrandId,NumberInStock,isStockUnlimited")] Product product)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,Name,Price,Description,ShortDescription,ThumbnailURL,CategoryId,BrandId,NumberInStock,isStockUnlimited")] Product product)
         {
-            if (id != product.id)
+            if (id != product.ID)
             {
                 return NotFound();
             }
@@ -115,7 +115,7 @@ namespace InfiniTech.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.id))
+                    if (!ProductExists(product.ID))
                     {
                         return NotFound();
                     }
@@ -161,7 +161,7 @@ namespace InfiniTech.Controllers
 
         private bool ProductExists(Guid id)
         {
-            return _context.Products.Any(e => e.id == id);
+            return _context.Products.Any(e => e.ID == id);
         }
     }
 }

@@ -7,9 +7,12 @@ namespace Domain
 {
     public class Product
     {
-        public Guid id { get; set; }
+        public Guid ID { get; set; }
         [Required]
         public string Name { get; set; }
+        [Required]
+        public double PurchasePrice { get; set; }
+        public double OldPrice { get; set; }
         [Required]
         public double Price { get; set; } = 1;
         [Required]
@@ -24,6 +27,8 @@ namespace Domain
         [Required]
         public Guid CategoryId { get; set; }
         //
+        public bool Available { get; set; }
+        public bool isVisible { get; set; }
 
         // Foreign Key For Brand
         public Brand Brand { get; set; }

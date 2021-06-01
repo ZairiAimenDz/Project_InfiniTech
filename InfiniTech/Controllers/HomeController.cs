@@ -34,6 +34,30 @@ namespace InfiniTech.Controllers
             return View();
         }
 
+        [HttpGet("/Details/{id}")]
+        public async Task<IActionResult> Details(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await repository.GetProductAsync((Guid)id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+        [Route("/Catalogue")]
+        public async Task<IActionResult> AllProducts([FromQuery] ProductParameters parameters)
+        {
+            var products = await repository.GetProductsList(parameters);
+            return View(products);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

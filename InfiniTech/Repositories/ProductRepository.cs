@@ -39,13 +39,13 @@ namespace InfiniTech.Repositories
         public Product GetProduct(Guid Productid)
         {
             return _context.Products.Include(p => p.Brand).Include(p => p.Category)
-                    .FirstOrDefault(p=>p.id == Productid);
+                    .FirstOrDefault(p=>p.ID == Productid);
         }
 
         public Task<Product> GetProductAsync(Guid Productid)
         {
             return _context.Products.Include(p => p.Brand).Include(p => p.Category)
-                    .FirstOrDefaultAsync(p=>p.id==Productid);
+                    .FirstOrDefaultAsync(p=>p.ID==Productid);
         }
 
         public async Task<PagedList<Product>> GetProductsList(ProductParameters parameters)

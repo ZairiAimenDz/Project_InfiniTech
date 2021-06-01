@@ -4,8 +4,9 @@
         <img src="@ProductImgURL" alt="">
     </div>
     <div class="product-details">
-        <span class="product-catagory">@Category</span>
-        <h4 class="description mb-1"><a href="">@Name</a></h4>
+        <span class="product-catagory mb-0">@Category - @ProductBrand</span>
+        
+        <h4 class="description mb-1"><a href="/Details/@Id">@Name</a></h4>
         <p class="description">@Description</p>
         <div class="product-bottom-details">
             <div class="product-price">@if (OldPrice != 0)
@@ -154,6 +155,9 @@
 
     [Parameter]
     public Guid Id { get; set; }
+
+    [Parameter]
+    public string ProductBrand { get; set; }
 
     [Parameter]
     public string Name { get; set; }

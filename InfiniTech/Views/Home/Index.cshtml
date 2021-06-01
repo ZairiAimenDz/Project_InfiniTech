@@ -3,6 +3,14 @@
     ViewData["Title"] = "Home Page";
 }
 
+<div class="row">
+
+</div>
+
+
+
+
+
 
 <div class="container mb-3">
     <div class="categories row" style="padding: 16px 0 16px 0;">
@@ -59,15 +67,15 @@
 
 <div class="mb-2" style="display:flex;">
     <h3 class="flex-grow-1">Recommended Products</h3>
-    <a class="text-right" href="#">View All</a>
+    <a class="text-right" asp-controller="Home" asp-action="AllProducts">View All</a>
 </div>
 <div style="display: grid;grid-template-columns: repeat(auto-fit, minmax(min(100%, 17em), 1fr));">
     @foreach (var item in Model.Take(4))
     {
         <component type="typeof(InfiniTech.Components.ProductCard)" render-mode="ServerPrerendered"
                    param-name='@item.Name' param-price="@item.Price"
-                   param-ProductImgURL='@item.ThumbnailURL'
-                   param-Category='@item.Category.Name'
+                   param-ProductImgURL='@item.ThumbnailURL' param-id='@item.ID'
+                   param-Category='@item.Category.Name' param-ProductBrand='@item.Brand.Name'
                    param-Description='@item.ShortDescription'/>
     }
 </div>

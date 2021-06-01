@@ -1,0 +1,18 @@
+﻿@model Application.Wrappers.PagedList<Domain.Product>
+
+@{
+    ViewData["Title"] = "All Products";
+}
+
+<div style="display: grid;grid-template-columns: repeat(auto-fit, minmax(min(100%, 17em), 1fr));">
+
+    @foreach (var item in Model)
+    {
+        <component type="typeof(InfiniTech.Components.ProductCard)" render-mode="ServerPrerendered"
+                   param-name='@item.Name' param-price="@item.Price"
+                   param-ProductImgURL='@item.ThumbnailURL' param-id="@item.ID"
+                   param-Category='@item.Category.Name'
+                   param-Description='@item.ShortDescription' />
+    }
+
+</div>
