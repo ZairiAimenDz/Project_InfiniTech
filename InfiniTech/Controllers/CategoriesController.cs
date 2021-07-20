@@ -16,10 +16,12 @@ namespace InfiniTech.Controllers
     public class CategoriesController : Controller
     {
         private readonly ICategoryRepository _repository;
+        private readonly IFileManager fileManager;
 
-        public CategoriesController(ICategoryRepository repository)
+        public CategoriesController(ICategoryRepository repository,IFileManager FileManager)
         {
             _repository = repository;
+            fileManager = FileManager;
         }
 
         // GET: Categories
@@ -56,11 +58,12 @@ namespace InfiniTech.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,Name,ImageFile")] Category category)
         {
             if (ModelState.IsValid)
             {
                 category.Id = Guid.NewGuid();
+                category.CategoryImage = await fileManager.UploadImage(category.ImageFile);
                 await _repository.AddCategoryAsync(category);
                 await _repository.SaveAsync();
                 return RedirectToAction(nameof(Index));
@@ -89,7 +92,7 @@ namespace InfiniTech.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name")] Category category)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,ImageFile")] Category category)
         {
             if (id != category.Id)
             {
@@ -100,6 +103,11 @@ namespace InfiniTech.Controllers
             {
                 try
                 {
+                    if (category.ImageFile != null)
+                    {
+                        fileManager.DeleteFile(category.CategoryImage);
+                        category.CategoryImage = await fileManager.UploadImage(category.ImageFile);
+                    }
                     _repository.UpdateCategory(category);
                     await _repository.SaveAsync();
                 }

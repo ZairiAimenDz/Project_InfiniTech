@@ -6,10 +6,10 @@ namespace Domain.Products
 {
     public class Smartphone : Product
     {
-        public string Screen { get; set; }
-        public int Memory { get; set; }
-        public int Sm_Storage { get; set; }
-        public string Cameras { get; set; }
-        public int BatteryCapacity { get; set; }
+        public string SPScreen { get; set; }
+        public int SPMemory { get; set; }
+        public int SPStorage { get; set; }
+        public string SPCamera { get; set; }
+        public int SPBattery { get; set; }
     }
 }

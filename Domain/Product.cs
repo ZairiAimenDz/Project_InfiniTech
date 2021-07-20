@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Domain
@@ -21,6 +23,8 @@ namespace Domain
         public string ShortDescription { get; set; }
         [Required]
         public string ThumbnailURL { get; set; }
+        [NotMapped]
+        public IFormFile ImageFile { get; set; }
         public DateTime DateAdded { get; set; }
         // Foreign Key For Category
         public Category Category { get; set; }

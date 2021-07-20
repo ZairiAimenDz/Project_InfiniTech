@@ -1,8 +1,48 @@
-﻿@{
+﻿@model DashboardViewModel
+@{
     ViewData["Title"] = "Admin Home";
     Layout = "_AdminLayout";
 }
 
 
+
+<div class="row">
+    <div class="col-6">
+        <h2>Announcements</h2>
+    </div>
+    <div class="col-6">
+        <a asp-controller="Announcements" asp-action="Create" class="btn btn-primary">Create New</a>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Image
+            </th>
+            <th>
+                Title
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Announcements)
+        {
+            <tr>
+                <td>
+                    <img src="/images/@item.Image" height="32" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    <a class="btn btn-outline-info" asp-controller="Announcements" asp-action="Details" asp-route-id="@item.ID">Details</a> 
+                    <a class="btn btn-outline-danger" asp-controller="Announcements" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 

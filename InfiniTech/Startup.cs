@@ -1,10 +1,12 @@
 using Application.Interfaces;
 using Domain;
 using InfiniTech.Data;
+using InfiniTech.Models;
 using InfiniTech.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +40,8 @@ namespace InfiniTech
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IFileManager, FileManager>();
+            services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
 
             /// MVC Config
             services.AddControllersWithViews();
@@ -45,6 +49,11 @@ namespace InfiniTech
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
+            /// Email Sender Config
+
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+        
             /// API Config
             services.AddApiVersioning(config =>
             {

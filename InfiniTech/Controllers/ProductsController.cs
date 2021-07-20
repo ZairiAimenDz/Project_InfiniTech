@@ -52,6 +52,10 @@ namespace InfiniTech.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            if (_context.Brands.Count() == 0)
+                return RedirectToAction("Create", "Brands");
+            if (_context.Categories.Count() == 0)
+                return RedirectToAction("Create", "Categories");
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name");
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return View();

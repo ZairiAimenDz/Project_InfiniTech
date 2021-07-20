@@ -30,5 +30,6 @@ namespace InfiniTech.Data
         public DbSet<OrderedProducts> OrderedProducts { get; set; }
         public DbSet<Laptop> Laptops{ get; set; }
         public DbSet<Smartphone> Smartphones { get; set; }
+        public DbSet<Announcement> Announcements{ get; set; }
     }
 }

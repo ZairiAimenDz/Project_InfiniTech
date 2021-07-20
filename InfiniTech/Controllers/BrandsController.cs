@@ -18,10 +18,12 @@ namespace InfiniTech.Controllers
     public class BrandsController : Controller
     {
         private readonly IBrandRepository _repo;
+        private readonly IFileManager fileManager;
 
-        public BrandsController(IBrandRepository repo)
+        public BrandsController(IBrandRepository repo,IFileManager fileManager)
         {
             _repo = repo;
+            this.fileManager = fileManager;
         }
 
         // GET: Brands
@@ -62,11 +64,12 @@ namespace InfiniTech.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Brand brand)
+        public async Task<IActionResult> Create([Bind("Id,Name,ImageFile")] Brand brand)
         {
             if (ModelState.IsValid)
             {
                 brand.Id = Guid.NewGuid();
+                brand.BrandImage = await fileManager.UploadImage(brand.ImageFile);
                 _repo.AddBrand(brand);
                 await _repo.SaveAsync();
                 return RedirectToAction(nameof(Index));
@@ -96,7 +99,7 @@ namespace InfiniTech.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Edit/{id?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name")] Brand brand)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,ImageFile")] Brand brand)
         {
             if (id != brand.Id)
             {
@@ -107,7 +110,13 @@ namespace InfiniTech.Controllers
             {
                 try
                 {
+                    if(brand.ImageFile != null)
+                    {
+                        fileManager.DeleteFile(brand.BrandImage);
+                        brand.BrandImage = await fileManager.UploadImage(brand.ImageFile);
+                    }                    
                     _repo.UpdateBrand(brand);
+
                     await _repo.SaveAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -150,6 +159,7 @@ namespace InfiniTech.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var brand = await _repo.GetBrandAsync(id);
+            fileManager.DeleteFile(brand.BrandImage);
             _repo.DeleteBrand(brand);
             await _repo.SaveAsync();
             return RedirectToAction(nameof(Index));

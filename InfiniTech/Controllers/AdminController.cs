@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Interfaces;
+using InfiniTech.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +10,18 @@ namespace InfiniTech.Controllers
 {
     public class AdminController : Controller
     {
-        public IActionResult Index()
+        private readonly IAnnouncementRepository _repo;
+
+        public AdminController(IAnnouncementRepository repository)
         {
-            return View();
+            _repo = repository;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var viewmodel = new DashboardViewModel {
+                Announcements = await _repo.GetAnnouncements(),
+            };
+            return View(viewmodel);
         }
     }
 }

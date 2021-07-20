@@ -6,10 +6,10 @@ namespace Domain.Products
 {
     public class Laptop : Product
     {
-        public string CPU { get; set; }
-        public string GPU { get; set; }
-        public int RAM { get; set; }
-        public string Display { get; set; }
-        public int Storage { get; set; }
+        public string LaptopCPU { get; set; }
+        public string LaptopGPU { get; set; }
+        public int LaptopRAM { get; set; }
+        public string LaptopDisplay { get; set; }
+        public int LaptopStorage { get; set; }
     }
 }

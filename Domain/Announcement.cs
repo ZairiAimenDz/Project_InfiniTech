@@ -6,15 +6,13 @@ using System.Text;
 
 namespace Domain
 {
-    [Table("ProductCategories")]
-    public class Category
+    public class Announcement
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string CategoryImage { get; set; }
+        public Guid ID { get; set; }
+        public string Image { get; set; }
         [NotMapped]
         public IFormFile ImageFile { get; set; }
-
-        public List<Product> CategoryProducts { get; set; }
+        public string Title { get; set; }
+        public string Text { get; set; }
     }
 }
