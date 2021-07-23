@@ -11,10 +11,6 @@
         <div class="product-bottom-details">
             <div class="product-price">@if (OldPrice != 0)
             {<small>@OldPrice $</small>} @Price $</div>
-            <div class="product-links">
-                <button @onclick="()=>FavProduct()"><i class="fa fa-heart @FavActive"></i></button>
-                <button ><i class="fa fa-shopping-cart"></i></button>
-            </div>
         </div>
     </div>
 </div>
@@ -45,9 +41,6 @@
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
-    }
-    .fav-active{
-        color:red;
     }
 
     .badge {
@@ -173,13 +166,5 @@
 
     [Parameter]
     public double OldPrice { get; set; }
-
-    private string FavActive { get; set; }
-
-    private Task FavProduct()
-    {
-        FavActive = string.IsNullOrEmpty(FavActive) ? "fav-active" : "";
-        return Task.CompletedTask;
-    }
 
 }

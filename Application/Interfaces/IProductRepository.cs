@@ -11,6 +11,8 @@ namespace Application.Interfaces
     public interface IProductRepository
     {
         Task<PagedList<Product>> GetProductsList(ProductParameters parameters);
+        Task<IEnumerable<Product>> GetLatestProductsList();
+        Task<IEnumerable<Product>> GetRandomProductsList();
         Task<Product> GetProductAsync(Guid Productid);
         Product GetProduct(Guid Productid);
         void AddProduct(Product product);

@@ -2,7 +2,7 @@
     background: #E5E5E5;
     padding: 18px;
     border-radius: 16px;
-    height: 196px;
+    height: auto;
 }
 
     .single-category a, .product-box a {

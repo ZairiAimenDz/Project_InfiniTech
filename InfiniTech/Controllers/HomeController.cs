@@ -15,18 +15,35 @@ namespace InfiniTech.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IProductRepository repository;
+        private readonly IProductRepository productrepo;
+        private readonly ICategoryRepository categoryrepo;
+        private readonly IBrandRepository brandsrepo;
+        private readonly IAnnouncementRepository announcementrepo;
 
-        public HomeController(ILogger<HomeController> logger,IProductRepository repository)
+        public HomeController(ILogger<HomeController> logger
+            ,IProductRepository productrepo,
+            ICategoryRepository categoryrepo,
+            IBrandRepository brandsrepo,
+            IAnnouncementRepository announcementrepo)
         {
             _logger = logger;
-            this.repository = repository;
+            this.productrepo = productrepo;
+            this.categoryrepo = categoryrepo;
+            this.brandsrepo = brandsrepo;
+            this.announcementrepo = announcementrepo;
         }
 
         public async Task<IActionResult> Index()
         {
-            var products = await repository.GetProductsList(new ProductParameters());
-            return View(products);
+            // TODO : Add Announcements
+            var viewmodel = new HomePageViewModel() {
+                Announcements = await announcementrepo.GetAnnouncements(),
+                LatestProducts = await productrepo.GetLatestProductsList(),
+                RandomProducts = await productrepo.GetRandomProductsList(),
+                RandomCategories = (await categoryrepo.GetCategoryList()).Take(6),
+                Brands = await brandsrepo.GetBrandsList(new Application.Dtos.Brand.BrandParameters())
+            };
+            return View(viewmodel);
         }
 
         public IActionResult Privacy()
@@ -42,7 +59,7 @@ namespace InfiniTech.Controllers
                 return NotFound();
             }
 
-            var product = await repository.GetProductAsync((Guid)id);
+            var product = await productrepo.GetProductAsync((Guid)id);
             if (product == null)
             {
                 return NotFound();
@@ -54,7 +71,7 @@ namespace InfiniTech.Controllers
         [Route("/Catalogue")]
         public async Task<IActionResult> AllProducts([FromQuery] ProductParameters parameters)
         {
-            var products = await repository.GetProductsList(parameters);
+            var products = await productrepo.GetProductsList(parameters);
             return View(products);
         }
 

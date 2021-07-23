@@ -14,18 +14,24 @@ using Microsoft.AspNetCore.Authorization;
 namespace InfiniTech.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [Route("Admin/[controller]")]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IProductRepository repository;
+        private readonly IFileManager fileManager;
 
-        public ProductsController(ApplicationDbContext context, IProductRepository repository)
+        public ProductsController(ApplicationDbContext context, 
+            IProductRepository repository,
+            IFileManager fileManager)
         {
             this._context = context;
             this.repository = repository;
+            this.fileManager = fileManager;
         }
 
         // GET: Products
+        [HttpGet("")]
         public async Task<IActionResult> Index([FromQuery] ProductParameters parameters)
         {
             var products = await repository.GetProductsList(parameters);
@@ -33,6 +39,7 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Products/Details/5
+        [HttpGet("Details/{id?}")]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -50,6 +57,7 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Products/Create
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             if (_context.Brands.Count() == 0)
@@ -64,13 +72,14 @@ namespace InfiniTech.Controllers
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,Name,Price,Description,ShortDescription,ThumbnailURL,CategoryId,BrandId,NumberInStock,isStockUnlimited")] Product product)
         {
             if (ModelState.IsValid)
             {
                 product.ID = Guid.NewGuid();
+                product.ThumbnailURL = await fileManager.UploadImage(product.ImageFile);
                 await repository.AddProductAsync(product);
                 await repository.SaveAsync();
                 return RedirectToAction(nameof(Index));
@@ -81,6 +90,7 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Products/Edit/5
+        [HttpGet("Edit/{id?}")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -101,9 +111,10 @@ namespace InfiniTech.Controllers
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,Name,Price,Description,ShortDescription,ThumbnailURL,CategoryId,BrandId,NumberInStock,isStockUnlimited")] Product product)
+        public async Task<IActionResult> Edit(Guid id,
+            [Bind("ID,Name,Price,Description,ShortDescription,ThumbnailURL,CategoryId,BrandId,NumberInStock,ImageFile,isStockUnlimited")] Product product)
         {
             if (id != product.ID)
             {
@@ -114,6 +125,11 @@ namespace InfiniTech.Controllers
             {
                 try
                 {
+                    if(product.ImageFile != null)
+                    {
+                        fileManager.DeleteFile(product.ThumbnailURL);
+                        product.ThumbnailURL = await fileManager.UploadImage(product.ImageFile);
+                    }
                     repository.UpdateProduct(product);
                     await repository.SaveAsync();
                 }
@@ -136,6 +152,7 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Products/Delete/5
+        [HttpGet("Delete/{id?}")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -153,11 +170,12 @@ namespace InfiniTech.Controllers
         }
 
         // POST: Products/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var product = await repository.GetProductAsync(id);
+            fileManager.DeleteFile(product.ThumbnailURL);
             repository.DeleteProduct(product);
             await repository.SaveAsync();
             return RedirectToAction(nameof(Index));

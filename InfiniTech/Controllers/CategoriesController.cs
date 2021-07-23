@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace InfiniTech.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [Route("Admin/[controller]")]
     public class CategoriesController : Controller
     {
         private readonly ICategoryRepository _repository;
@@ -25,12 +26,14 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Categories
+        [HttpGet("")]
         public async Task<IActionResult> Index()
         {
             return View(await _repository.GetCategoryList());
         }
 
         // GET: Categories/Details/5
+        [HttpGet("Details/{id?}")]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -48,6 +51,7 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Categories/Create
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
@@ -56,7 +60,7 @@ namespace InfiniTech.Controllers
         // POST: Categories/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,ImageFile")] Category category)
         {
@@ -72,6 +76,7 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Categories/Edit/5
+        [HttpGet("Edit/{id?}")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -90,9 +95,9 @@ namespace InfiniTech.Controllers
         // POST: Categories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Edit/{id?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,ImageFile")] Category category)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,CategoryImage,ImageFile")] Category category)
         {
             if (id != category.Id)
             {
@@ -128,6 +133,7 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Categories/Delete/5
+        [HttpGet("Delete/{id?}")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -145,11 +151,12 @@ namespace InfiniTech.Controllers
         }
 
         // POST: Categories/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id?}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var category = await _repository.GetCategoryAsync(id);
+            fileManager.DeleteFile(category.CategoryImage);
             _repository.DeleteCategory(category);
             await _repository.SaveAsync();
             return RedirectToAction(nameof(Index));

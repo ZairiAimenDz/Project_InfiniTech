@@ -8,7 +8,7 @@
 
     @foreach (var item in Model)
     {
-        <component type="typeof(InfiniTech.Components.ProductCard)" render-mode="ServerPrerendered"
+        <component type="typeof(InfiniTech.Components.ProductCard)" render-mode="Static"
                    param-name='@item.Name' param-price="@item.Price"
                    param-ProductImgURL='@item.ThumbnailURL' param-id="@item.ID"
                    param-Category='@item.Category.Name'

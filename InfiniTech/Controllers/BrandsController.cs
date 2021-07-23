@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace InfiniTech.Controllers
 {
     [Authorize(Roles = "Admin")]
-    [Route("admin/[controller]")]
+    [Route("Admin/[controller]")]
     public class BrandsController : Controller
     {
         private readonly IBrandRepository _repo;
@@ -27,7 +27,7 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Brands
-        [Route("")]
+        [HttpGet("")]
         public async Task<IActionResult> Index([FromQuery]BrandParameters parameters)
         {
             return View(await _repo.GetBrandsList(parameters));
@@ -35,7 +35,7 @@ namespace InfiniTech.Controllers
 
         // GET: Brands/Details/5
 
-        [Route("Details/{id?}")]
+        [HttpGet("Details/{id?}")]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -53,7 +53,7 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Brands/Create
-        [Route("Create")]
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
@@ -64,7 +64,7 @@ namespace InfiniTech.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ImageFile")] Brand brand)
+        public async Task<IActionResult> Create([Bind("Id,Name,BrandImage,ImageFile")] Brand brand)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Brands/Edit/5
-        [Route("Edit/{id?}")]
+        [HttpGet("Edit/{id?}")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -99,7 +99,7 @@ namespace InfiniTech.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Edit/{id?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,ImageFile")] Brand brand)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,BrandImage,ImageFile")] Brand brand)
         {
             if (id != brand.Id)
             {
@@ -136,7 +136,7 @@ namespace InfiniTech.Controllers
         }
 
         // GET: Brands/Delete/5
-        [Route("Delete/{id?}")]
+        [HttpGet("Delete/{id?}")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
