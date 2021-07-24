@@ -3,6 +3,7 @@ using Application.Interfaces;
 using InfiniTech.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace InfiniTech.Controllers
                 LatestProducts = await productrepo.GetLatestProductsList(),
                 RandomProducts = await productrepo.GetRandomProductsList(),
                 RandomCategories = (await categoryrepo.GetCategoryList()).Take(6),
-                Brands = await brandsrepo.GetBrandsList(new Application.Dtos.Brand.BrandParameters())
+                Brands = await brandsrepo.GetBrandsList()
             };
             return View(viewmodel);
         }
@@ -71,8 +72,10 @@ namespace InfiniTech.Controllers
         [Route("/Catalogue")]
         public async Task<IActionResult> AllProducts([FromQuery] ProductParameters parameters)
         {
-            var products = await productrepo.GetProductsList(parameters);
-            return View(products);
+            ViewData["BrandId"] = new SelectList(await brandsrepo.GetBrandsList(), "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(await categoryrepo.GetCategoryList(), "Id", "Name");
+            var viewmodel = new AllProductsViewModel { Products = await productrepo.GetProductsList(parameters), Parameters = new() };
+            return View(viewmodel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

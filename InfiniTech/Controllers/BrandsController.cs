@@ -28,9 +28,9 @@ namespace InfiniTech.Controllers
 
         // GET: Brands
         [HttpGet("")]
-        public async Task<IActionResult> Index([FromQuery]BrandParameters parameters)
+        public async Task<IActionResult> Index()
         {
-            return View(await _repo.GetBrandsList(parameters));
+            return View(await _repo.GetBrandsList());
         }
 
         // GET: Brands/Details/5

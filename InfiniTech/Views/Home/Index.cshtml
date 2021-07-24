@@ -59,7 +59,7 @@
     {
         <component type="typeof(InfiniTech.Components.ProductCard)" render-mode="ServerPrerendered"
                    param-name='@item.Name' param-price="@item.Price"
-                   param-ProductImgURL='@item.ThumbnailURL' param-id='@item.ID'
+                   param-ProductImgURL='@(Url.Content("~/images/"+item.ThumbnailURL))' param-id='@item.ID'
                    param-Category='@item.Category.Name' param-ProductBrand='@item.Brand.Name'
                    param-Description='@item.ShortDescription' />
     }
@@ -75,7 +75,7 @@
     {
         <component type="typeof(InfiniTech.Components.ProductCard)" render-mode="ServerPrerendered"
                    param-name='@item.Name' param-price="@item.Price"
-                   param-ProductImgURL='@item.ThumbnailURL' param-id='@item.ID'
+                   param-ProductImgURL='@(Url.Content("~/images/"+item.ThumbnailURL))' param-id='@item.ID'
                    param-Category='@item.Category.Name' param-ProductBrand='@item.Brand.Name'
                    param-Description='@item.ShortDescription' />
     }

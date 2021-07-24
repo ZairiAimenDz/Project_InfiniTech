@@ -62,10 +62,16 @@ namespace InfiniTech.Repositories
 
             var collection = _context.Products.OrderByDescending(p=>p.DateAdded).Include(p=>p.Brand).Include(p=>p.Category) as IQueryable<Product>;
             // Filtering By The Entered Details :
-            // By Name :
-            collection = string.IsNullOrEmpty(parameters.name) ? collection :
-                            collection.Where(p => p.Name.ToLower()
-                                    .Contains(parameters.name.ToLower()));
+
+            // By SearchTerm :
+            collection = string.IsNullOrEmpty(parameters.SearchTerm) ? collection :
+                            collection.Where(p =>
+                            p.Name.ToLower().Contains(parameters.SearchTerm.ToLower())
+                            || p.Description.ToLower().Contains(parameters.SearchTerm.ToLower())
+                            || p.ShortDescription.ToLower().Contains(parameters.SearchTerm.ToLower())
+                            || p.Brand.Name.ToLower().Contains(parameters.SearchTerm.ToLower())
+                            || p.Category.Name.ToLower().Contains(parameters.SearchTerm.ToLower())
+                            );
             // By Category :
             collection = parameters.Categoryid == Guid.Empty ? collection :
                             collection.Where(p=>p.CategoryId == parameters.Categoryid);

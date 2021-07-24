@@ -74,7 +74,7 @@ namespace InfiniTech.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Name,Price,Description,ShortDescription,ThumbnailURL,CategoryId,BrandId,NumberInStock,isStockUnlimited")] Product product)
+        public async Task<IActionResult> Create([Bind("id,Name,Price,Description,ShortDescription,ThumbnailURL,ImageFile,CategoryId,BrandId,NumberInStock,isStockUnlimited")] Product product)
         {
             if (ModelState.IsValid)
             {

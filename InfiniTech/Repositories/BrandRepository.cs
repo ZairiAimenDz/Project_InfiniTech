@@ -45,23 +45,10 @@ namespace InfiniTech.Repositories
             return _context.Brands.FirstOrDefaultAsync(b=>b.Id == brandid);
         }
 
-        public async Task<PagedList<Brand>> GetBrandsList(BrandParameters parameters)
+        public async Task<IEnumerable<Brand>> GetBrandsList()
         {
-            if (parameters == null)
-            {
-                return null;
-            }
-
             var collection = _context.Brands.OrderBy(b=>b.Name) as IQueryable<Brand>;
-            // Filtering By Brand Name :
-            collection = string.IsNullOrEmpty(parameters.BrandName) ? collection :
-                            collection.Where(b => b.Name.ToLower()
-                                    .Contains(parameters.BrandName.ToLower()));
-            // If Statement That Check If The Brand We Are Looking For Exists, If Not Return The Full List
-
-            return await PagedList<Brand>.CreateAsync(collection,
-                parameters.PageNumber,
-                parameters.PageSize);
+            return await collection.ToListAsync();
         }
 
         public bool Save()

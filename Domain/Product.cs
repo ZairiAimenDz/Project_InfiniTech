@@ -16,12 +16,11 @@ namespace Domain
         public double PurchasePrice { get; set; }
         public double OldPrice { get; set; }
         [Required]
-        public double Price { get; set; } = 1;
+        public double Price { get; set; }
         [Required]
         public string Description { get; set; }
         [Required]
         public string ShortDescription { get; set; }
-        [Required]
         public string ThumbnailURL { get; set; }
         [NotMapped]
         public IFormFile ImageFile { get; set; }
@@ -39,9 +38,8 @@ namespace Domain
         [Required]
         public Guid BrandId { get; set; }
         //
-
-        public int NumberInStock { get; set; } = 0;
         [Required]
+        public int NumberInStock { get; set; } = 0;
         public bool isStockUnlimited { get; set; }
     }
 }
