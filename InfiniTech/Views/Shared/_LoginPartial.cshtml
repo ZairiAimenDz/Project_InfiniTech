@@ -28,7 +28,8 @@
         <li class="nav-item active">
             <a class="nav-link" href="#"><i class="fas fa-shipping-fast"></i> Orders</a>
         </li>
-        <component type="typeof(InfiniTech.Components.CartIcon)" render-mode="ServerPrerendered" />
+        <component type="typeof(InfiniTech.Components.CartIcon)" render-mode="ServerPrerendered"
+                   param-CartURL='@Url.Action("Cart","Home")'/>
 
     }
 </ul>

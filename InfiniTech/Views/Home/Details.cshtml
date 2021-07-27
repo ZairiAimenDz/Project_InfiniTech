@@ -12,9 +12,13 @@
         <h3 class="mb-4 font-weight-bolder">@Html.DisplayFor(model => model.Name)</h3>
         <p class="mb-3">@Html.DisplayFor(model => model.ShortDescription)</p>
         <p class="text-danger">@Html.DisplayFor(model => model.Price) $</p>
-        <a class="btn btn-warning" href="#">Order Product @if (!Model.isStockUnlimited) {
-            @("( " + Model.NumberInStock + " Left )")
-        }</a>
+        <a class="btn btn-warning" href="#">
+            Order Product @if (!Model.isStockUnlimited)
+            {
+                @("( " + Model.NumberInStock + " Left )")
+            }
+        </a>
+        <component type="typeof(InfiniTech.Components.CartButton)" param-ItemID="@Model.ID" render-mode="Server" />
     </div>
     <div class="col-6">
         <img class="w-100 my-auto" src="@Model.ThumbnailURL"/>

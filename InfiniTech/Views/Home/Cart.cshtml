@@ -1,0 +1,4 @@
+﻿<component type="typeof(InfiniTech.Components.CartView)" render-mode="Server" 
+           param-isUserLoggedIn="@User.Identity.IsAuthenticated"
+           param-UserID='@(User.Identity.IsAuthenticated?User.Claims.FirstOrDefault().Value:"")'
+           param-RedirectURL="@Url.Action("Index","Home")"/>

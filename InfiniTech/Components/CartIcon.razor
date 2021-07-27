@@ -1,5 +1,5 @@
 ﻿<li class="nav-item active">
-    <a class="nav-link" href="#" style="position:relative;">
+    <a class="nav-link" href="@CartURL" style="position:relative;">
         <i class="fas fa-shopping-basket"></i><span style="background-color: yellow;
             border-radius: 50%;
             height: 13px;
@@ -12,3 +12,8 @@
             top: 24px;">2</span> Cart
     </a>
 </li>
+
+@code{
+    [Parameter]
+    public string CartURL { get; set; }
+}

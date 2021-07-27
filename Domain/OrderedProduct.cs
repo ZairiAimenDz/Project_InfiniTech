@@ -2,7 +2,7 @@
 
 namespace Domain
 {
-    public class OrderedProducts
+    public class OrderedProduct
     {
         public Product Product { get; set; }
         public Guid ProductId { get; set; }

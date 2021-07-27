@@ -18,7 +18,7 @@ namespace InfiniTech.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<OrderedProducts>().HasKey(t => new {t.OrderId,t.ProductId });
+            builder.Entity<OrderedProduct>().HasKey(t => new {t.OrderId,t.ProductId });
             builder.Entity<UserFavProduct>().HasKey(t => new {t.ApplicationUserId,t.ProductId });
         }
 
@@ -27,9 +27,10 @@ namespace InfiniTech.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<UserFavProduct> UserLikedProducts { get; set; }
-        public DbSet<OrderedProducts> OrderedProducts { get; set; }
+        public DbSet<OrderedProduct> OrderedProducts { get; set; }
         public DbSet<Laptop> Laptops{ get; set; }
         public DbSet<Smartphone> Smartphones { get; set; }
+        public DbSet<BuyerDetails> Buyers { get; set; }
         public DbSet<Announcement> Announcements{ get; set; }
     }
 }
