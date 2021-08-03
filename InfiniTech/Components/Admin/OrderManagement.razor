@@ -1,0 +1,63 @@
+﻿@inject ApplicationDbContext _context
+
+<div class="row border-bottom py-2">
+    <div class="col-sm-3">
+        <p>@Name</p>
+        <p class="mb-0">@Phone</p>
+    </div>
+    <div class="col-sm-2">
+        @Total $
+    </div>
+    <div class="col-sm-3">
+        <a class="btn btn-outline-info" href="@("/OrderDetails/"+OrderId)">@OrderId</a>
+    </div>
+    <div class="col-sm-4">
+        @if (isfinished)
+        {
+            <p>Finished</p>
+        }
+        else
+        {
+            <select @bind="@State" @onselectionchange="Valuechanged" class="form-control">
+                @foreach (var item in Enum.GetValues(typeof(DeliveryState)))
+                {
+                    <option value="@item">@item</option>
+                }
+            </select>
+            <button @onclick="Valuechanged" class="btn btn-outline-info">Change</button>
+        }
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Guid OrderId { get; set; }
+    [Parameter]
+    public string Name { get; set; }
+    [Parameter]
+    public string Phone { get; set; }
+    [Parameter]
+    public double Total { get; set; }
+    [Parameter]
+    public DeliveryState State { get; set; }
+
+    public bool isfinished { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        isfinished = State == DeliveryState.isFinished;
+        return base.OnInitializedAsync();
+    }
+
+    public async Task Valuechanged()
+    {
+        var order = await _context.Orders.FindAsync(OrderId);
+        order.State = State;
+        await _context.SaveChangesAsync();
+        if (State == DeliveryState.isFinished)
+        {
+            isfinished = true;
+        }
+    }
+}

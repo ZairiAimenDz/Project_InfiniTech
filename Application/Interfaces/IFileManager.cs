@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,7 @@ namespace Application.Interfaces
     public interface IFileManager
     {
         Task<string> UploadImage(IFormFile file);
+        Task<string> UploadImage(IBrowserFile file);
         void DeleteFile(string FileName);
     }
 }

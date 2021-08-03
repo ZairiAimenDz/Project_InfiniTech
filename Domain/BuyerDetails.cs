@@ -16,8 +16,6 @@ namespace Domain
         public string ClientName { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public string PaymentEvidenceImg { get; set; }
-        [NotMapped]
-        public IFormFile PaymentEvidence{ get; set; }
     }
 
     public enum PaymentMethod

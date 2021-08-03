@@ -32,9 +32,13 @@ namespace InfiniTech.Controllers
 
         // GET: Products
         [HttpGet("")]
-        public async Task<IActionResult> Index([FromQuery] ProductParameters parameters)
+        public async Task<IActionResult> Index(string searchterm,int pagenum)
         {
-            var products = await repository.GetProductsList(parameters);
+            var products = await repository.GetProductsList(new() {
+                SearchTerm=searchterm??"",
+                PageNumber=pagenum<1?1:pagenum,
+                PageSize=12
+            });
             return View(products);
         }
 

@@ -14,12 +14,21 @@ namespace Domain
         public string ShippingAddress { get; set; }
         [Required]
         public string OrderPhone { get; set; }
+        public double Total { get; set; }
         public DateTime OrderDate { get; set; }
-        public bool isReady { get; set; }
-        public bool isShipping { get; set; }
-        public bool isShipped { get; set; }
-        public bool isReceived { get; set; }
-        public bool isFinished { get; set; }
+        public DeliveryState State { get; set; }
         public List<OrderedProduct> OrderedProducts { get; set; }
+    }
+
+    public enum DeliveryState
+    {
+        JustCreated,// Created The Order
+        ForCheckUp, // Added A Payment Method And Payment Evidence
+        Invalid,    // Payment Invalid
+        isReady,    // Order Ready
+        isShipping, // Order Getting Shipped
+        isShipped,  // The Order Reached Its Destination
+        isReceived, // The Order Has Been Received
+        isFinished
     }
 }

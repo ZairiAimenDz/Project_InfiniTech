@@ -5,7 +5,11 @@
     Layout = "_AdminLayout";
 }
 
-<h1>Index</h1>
+<h1>Products List :</h1>
+
+<form class="py-2">
+    <input class="form-control" name="searchterm"/>
+</form>
 
 <p>
     <a class="btn btn-primary" asp-action="Create">Create New</a>
@@ -64,3 +68,14 @@
 }
     </tbody>
 </table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">      
+        <li class="page-item @(Model.HasPrevious?"":"disabled")">
+            <a class="page-link" asp-route-pagenum="@(Model.PageNumber-1)">&laquo; Previous</a>
+        </li>
+        <li class="page-item @(Model.HasNext?"":"disabled")">
+            <a class="page-link" asp-route-pagenum="@(Model.PageNumber+1)">Next &raquo;</a>
+        </li>
+    </ul>
+</nav>

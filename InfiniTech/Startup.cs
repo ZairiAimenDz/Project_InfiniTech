@@ -93,8 +93,8 @@ namespace InfiniTech
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
                 endpoints.MapBlazorHub();
+                endpoints.MapRazorPages();
             });
         }
     }
