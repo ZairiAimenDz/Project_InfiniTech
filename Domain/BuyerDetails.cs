@@ -20,7 +20,6 @@ namespace Domain
 
     public enum PaymentMethod
     {
-        Bank_Check,
         CCP,
         Hand_to_Hand
     }

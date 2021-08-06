@@ -1,4 +1,6 @@
-﻿<li class="nav-item active">
+﻿@inject ProtectedLocalStorage storage
+
+<li class="nav-item active">
     <a class="nav-link" href="@CartURL" style="position:relative;">
         <i class="fas fa-shopping-basket"></i><span style="background-color: yellow;
             border-radius: 50%;
@@ -9,11 +11,19 @@
             margin-left: -8px;
             position: absolute;
             text-align: center;
-            top: 24px;">2</span> Cart
+            top: 24px;">@cartitems</span> Cart
     </a>
 </li>
 
 @code{
     [Parameter]
     public string CartURL { get; set; }
+
+    public int cartitems { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var itemsarr = await storage.GetAsync<Guid[]>("cartitems");
+        cartitems = itemsarr.Success ? itemsarr.Value.Count() : 0;
+    }
 }
