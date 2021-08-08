@@ -17,13 +17,20 @@
 
 @code{
     [Parameter]
-    public string CartURL { get; set; }
+    public string CartURL { get; set; } = "";
 
-    public int cartitems { get; set; }
+    public int cartitems { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {
         var itemsarr = await storage.GetAsync<Guid[]>("cartitems");
-        cartitems = itemsarr.Success ? itemsarr.Value.Count() : 0;
+        if (itemsarr.Success && itemsarr.Value is not null)
+        {
+            cartitems = itemsarr.Value.ToList().Count();
+        }
+        else
+        {
+            cartitems = 0;
+        }
     }
 }

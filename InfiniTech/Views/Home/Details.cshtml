@@ -5,19 +5,30 @@
     ViewData["Title"] = Model.Name;
 }
 
+
 <div class="row mb-5">
-    <div class="col-6 p-4">
-        <h4 class="font-weight-lighter">@Html.DisplayFor(model => model.Category.Name) - @Html.DisplayFor(model => model.Brand.Name)</h4>
+    <div class="col-6">
+        <img class="w-100 my-auto" src="/images/@Model.ThumbnailURL" />
+    </div>
+    <div class="col-6 p-4 text-left">
         <hr class="my-3" />
         <h3 class="mb-4 font-weight-bolder">@Html.DisplayFor(model => model.Name)</h3>
+        <p class="mb-0"><b>Category :</b><a class="btn m-0 p-0" href="@Url.Action("AllProducts","Home",new Application.Dtos.Product.ProductParameters() {Categoryid=Model.CategoryId })">@Html.DisplayFor(model => model.Category.Name)</a></p>
+        <p><b>Brand :</b><a class="btn m-0 p-0" href="@Url.Action("AllProducts","Home",new Application.Dtos.Product.ProductParameters() {BrandId=Model.BrandId})">@Html.DisplayFor(model => model.Brand.Name)</a></p>
         <p class="mb-3">@Html.DisplayFor(model => model.ShortDescription)</p>
         <p class="text-danger">@Html.DisplayFor(model => model.Price) $</p>
         <component type="typeof(InfiniTech.Components.Cart.CartButton)" param-ItemID="@Model.ID" render-mode="Server" />
-    </div>
-    <div class="col-6">
-        <img class="w-100 my-auto" src="/images/@Model.ThumbnailURL"/>
+        <br />
+        @if (User.Identity.IsAuthenticated)
+        {
+            <component type="typeof(InfiniTech.Components.Shared.WishlistButton)" param-ItemID="@Model.ID" param-userid="@User.Claims.FirstOrDefault().Value" render-mode="Server" />
+        }
     </div>
 </div>
+
+
+
+
 
 <div class="p-3">
     <h3>Description</h3>

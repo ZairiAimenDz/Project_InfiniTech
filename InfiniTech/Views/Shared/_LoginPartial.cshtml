@@ -19,20 +19,28 @@
                 <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </form>
         </li>
+        @if (!User.IsInRole("Admin"))
+        {
+            <li class="nav-item active">
+                <a class="nav-link" asp-controller="Home" asp-action="UserWishList"><i class="fas fa-heart"></i> WishList</a>
+            </li>
+        }
     }
     else
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i> Login</a>
         </li>
-
     }
+
+    <li class="nav-item active">
+        <a class="nav-link" asp-action="SearchForOrder" asp-controller="Home"><i class="fas fa-shipping-fast"></i> Orders</a>
+    </li>
+
 
     @if (!User.IsInRole("Admin"))
     {
-        <li class="nav-item active">
-            <a class="nav-link" href="#"><i class="fas fa-shipping-fast"></i> Orders</a>
-        </li>
+
         <component type="typeof(InfiniTech.Components.Cart.CartIcon)" render-mode="Server"
                    param-CartURL='@Url.Action("Cart","Home")' />
     }

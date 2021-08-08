@@ -11,7 +11,7 @@
         {
             <div class="col-sm-4 col-md-3 col-lg-2 col-6 p-2">
                 <div class="single-category h-100">
-                    <a href="@Url.Action("AllProducts",new ProductParameters() {Categoryid = item.Id})">
+                    <a class="h-100" href="@Url.Action("AllProducts",new ProductParameters() {Categoryid = item.Id})">
                         <div class="single-category-icon p-3"><img height="64" src="/images/@item.CategoryImage" /></div>
                         <div class="single-category-title">@item.Name</div>
                     </a>
@@ -27,7 +27,7 @@
         @if (Model.Announcements.Count() >= 1)
         {
             <div class="carousel-item active">
-                <a>
+                <a href="#">
                     <img src="/images/@Model.Announcements.First().Image" class="d-block w-100" alt="...">
                 </a>
             </div>
@@ -50,7 +50,7 @@
 </div>
 
 
-<div class="mb-2" style="display:flex;">
+<div class="mb-3" style="display:flex;">
     <h3 class="flex-grow-1">Random Products</h3>
     <a class="text-right" asp-controller="Home" asp-action="AllProducts">View All</a>
 </div>
@@ -66,7 +66,7 @@
 </div>
 
 
-<div class="mb-2" style="display:flex;">
+<div class="mb-3" style="display:flex;">
     <h3 class="flex-grow-1">Latest Added</h3>
     <a class="text-right" asp-controller="Home" asp-action="AllProducts">View All</a>
 </div>
@@ -83,7 +83,7 @@
 
 
 <div class="text-center">
-    <h1 class="display-4">Brands</h1>
+    <h1 class="display-4 mb-3">Brands</h1>
     <div class="row">
         @foreach (var brand in Model.Brands)
         {

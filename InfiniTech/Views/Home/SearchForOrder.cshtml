@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Search For An Order";
+}
+
+
+<div class="my-lg-5 py-5">
+    <div class="p-5 text-center">
+        <h2>Enter The Order Code</h2>
+        <form method="get">
+            <input class="form-control" type="text" placeholder="Copy The Order Code Here" name="id">
+            <button class="btn btn-primary p-2 rounded-lg mt-2" type="submit">Search</button>
+        </form>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <hr class="mx-lg-5" />
+            <p>or</p>
+            <hr class="mx-lg-5" />
+            <a asp-action="UserOrdersList" class="btn btn-outline-primary">See Your Orders List</a>
+        }
+    </div>
+</div>
