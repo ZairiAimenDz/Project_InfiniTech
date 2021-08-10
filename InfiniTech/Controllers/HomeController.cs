@@ -106,6 +106,11 @@ namespace InfiniTech.Controllers
             {
                 return NotFound();
             }
+
+            product.views++;
+            productrepo.UpdateProduct(product);
+            await productrepo.SaveAsync();
+            
             var viewmodel = new ProductDetailsViewModel() {
                 ProdDetails = product,
                 OtherProducts = await productrepo.GetRandomProductsList(),

@@ -45,6 +45,7 @@ namespace Domain
         //
         [Required]
         public int NumberInStock { get; set; }
+        public long views { get; set; }
     }
 
     public enum ProductCondition

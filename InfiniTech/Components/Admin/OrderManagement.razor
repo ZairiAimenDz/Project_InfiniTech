@@ -71,6 +71,11 @@
         if (State == DeliveryState.isFinished)
         {
             isfinished = true;
+            foreach (var item in _context.OrderedProducts.Where(o=>o.OrderId == OrderId).ToList())
+            {
+
+            }
+            await _context.SaveChangesAsync();
         }
     }
 

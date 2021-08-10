@@ -98,7 +98,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ComparedProducts.Add(await _repo.GetProductAsync(ID));
+        if(ID != Guid.Empty)
+            ComparedProducts.Add(await _repo.GetProductAsync(ID));
     }
 
     private async Task<IEnumerable<Product>> SearchProducts(string searchText)

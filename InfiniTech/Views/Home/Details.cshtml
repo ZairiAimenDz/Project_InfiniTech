@@ -48,6 +48,7 @@
         <p><b>Color :</b>@Html.DisplayFor(model => model.ProdDetails.Color)</p>
         <p class="mb-3">@Html.DisplayFor(model => model.ProdDetails.ShortDescription)</p>
         <p class="text-danger">@Html.DisplayFor(model => model.ProdDetails.Price) @Constants.Currency</p>
+        <a class="btn btn-info" asp-controller="Home" asp-action="CompareProducts" asp-route-id="@Model.ProdDetails.ID"><i class="fas fa-greater-than-equal"></i> Compare Product</a>
         @if (Model.ProdDetails.NumberInStock > 0)
         {
             <component type="typeof(InfiniTech.Components.Cart.CartButton)" param-ItemID="@Model.ProdDetails.ID" render-mode="Server" />
