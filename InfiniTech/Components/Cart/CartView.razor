@@ -20,7 +20,7 @@
                         </div>
                     </div>
                     <div class="col-sm-1 text-right">
-                        <p>@item.Price $</p>
+                        <p>@item.Price @Constants.Currency</p>
                     </div>
                     <div class="col-sm-1 p-2">
                         <button class="btn btn-danger my-auto" @onclick="() => Deleteitem(item.ID)"><i class="fas fa-times"></i></button>
@@ -63,16 +63,16 @@
             </EditForm>
         </div>
         <div class="col-sm-3 text-right">
-            <p>Products : @cartitems.Sum(p => p.Price) $</p>
+            <p>Products : @cartitems.Sum(p => p.Price) @Constants.Currency</p>
             <div>
                 Get Products Delivered
                 <input type="checkbox" @bind-value="delivery" />
             </div>
             @if (delivery)
             {
-                <p>Delivery : 20 $</p>
+                <p>Delivery : @Constants.DeliveryFee @Constants.Currency</p>
             }
-            <p>Total : @(cartitems.Sum(p => p.Price) + (delivery ? 20 : 0)) $</p>
+            <p>Total : @(cartitems.Sum(p => p.Price) + (delivery ? Constants.DeliveryFee : 0)) @Constants.Currency</p>
         </div>
     </div>
     @*    <button @onclick="() => CreateAnOrder()" class="btn btn-primary">Order</button>
@@ -144,10 +144,11 @@
                 UserID = isUserLoggedIn ? UserID : null,
                 OrderedProducts = new(),
                 State = DeliveryState.JustCreated,
-                Total = cartitems.Sum(p => p.Price) + (delivery ? 20 : 0),
+                Total = cartitems.Sum(p => p.Price) + (delivery ? Constants.DeliveryFee : 0),
                 OrderPhone = phoneNumber,
                 ShippingAddress = address,
-                BuyerDetails = Details
+                BuyerDetails = Details,
+                DeliveryIncluded = delivery
             };
             cartitems.ForEach(p => order.OrderedProducts.Add(new() { ProductId = p.ID, Product = p }));
 

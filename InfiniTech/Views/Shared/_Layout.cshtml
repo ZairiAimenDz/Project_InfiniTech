@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - InfiniTech</title>
+    <title>@ViewData["Title"] - @Constants.Website_Name</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -16,7 +16,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><b>Infini</b>TECH</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/logos/@Constants.Website_Logo" height="48"/>
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -54,33 +56,28 @@
         <div class="container text-center text-md-left">
             <div class="row">
                 <div class="col-md-2 mt-md-0 mt-3">
-                    <h5 class="text-uppercase">InfiniTech</h5>
+                    <h5 class="text-uppercase">@Constants.Website_Name</h5>
                 </div>
                 <hr class="clearfix w-100 d-md-none pb-3">
                 <div class="col-md-3 mb-md-0 mb-3">
                     <ul class="list-unstyled">
                         <li>
-                            <a href="#!">Home</a>
+                            <a asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li>
-                            <a href="#!">Categories</a>
+                            <a asp-controller="Home" asp-action="AllProducts">Categories</a>
                         </li>
                         <li>
-                            <a href="#!">All Products</a>
-                        </li>
-                        <li>
-                            <a href="#!">Contact</a>
-                        </li>
-                        <li>
-                            <a href="#!">About</a>
+                            <a asp-controller="Home" asp-action="AllProducts">All Products</a>
                         </li>
                     </ul>
 
                 </div>
                 <div class="col-md-3 mb-md-0 mb-3">
                     <ul class="list-unstyled">
-                        <li>Address: Store address line1,</li>
-                        <li>City, wilaya</li>
+                        <li>Address: @Constants.AddressLine1</li>
+                        <li>@Constants.AddressLine2</li>
+                        <li>Phone: @Constants.ContactPhone</li>
                     </ul>
                 </div>
                 <div class="col-md-4 mb-md-0 mb-3">
@@ -94,7 +91,7 @@
         </div>
         <div class="footer-copyright text-center py-3">
             © 2021 Copyright:
-            <a href="#"> InfiniTech.com</a>
+            <a href="#"> @Constants.Website_Name .com</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -1,0 +1,105 @@
+﻿@inject IProductRepository _repo
+@using Blazored.Typeahead
+
+@if (ComparedProducts.Count() < 6)
+{
+    <div class="text-center mb-5">
+        <h2>Search For Products To Compare</h2>
+        <BlazoredTypeahead SearchMethod="SearchProducts"
+                           @bind-Value="SelectedFilm">
+            <SelectedTemplate>
+                @context.Name
+            </SelectedTemplate>
+            <ResultTemplate>
+                @context.Title (@context.Year)
+            </ResultTemplate>
+        </BlazoredTypeahead>
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th></th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td>
+                @if (ComparedProducts.Count() > 1)
+                {
+                    <button @onclick="()=> { ComparedProducts.Remove(item); }" class="btn btn-danger">Remove Element</button>
+                }
+            </td>
+        }
+    </tr>
+    <tr>
+        <th></th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td>
+                <img height="64" src="/images/@item.ThumbnailURL" />
+            </td>
+        }
+    </tr>
+    <tr>
+        <th>Rating</th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td>
+                4.5/5
+            </td>
+        }
+    </tr>
+    <tr>
+        <th>Name</th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td>
+                @item.Name
+            </td>
+        }
+    </tr>
+    <tr>
+        <th>Details</th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td>
+                <p>Cateogry : @item.Category.Name</p>
+                <p>Brand : @item.Brand.Name</p>
+                <p>Condition : @item.ProductCondition</p>
+                <p>Color : @item.Color</p>
+            </td>
+        }
+    </tr>
+    <tr>
+        <th>Description / Specs</th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td>
+                @((MarkupString)item.Description)
+            </td>
+        }
+    </tr>
+</table>
+
+<div class="row">
+
+</div>
+
+
+
+
+@code {
+    [Parameter]
+    public Guid ID { get; set; }
+    public List<Product> ComparedProducts { get; set; } = new();
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        ComparedProducts.Add(await _repo.GetProductAsync(ID));
+    }
+
+    private async Task<IEnumerable<Product>> SearchProducts(string searchText)
+    {
+        return await _repo.GetProductsList(new() {SearchTerm=searchText});
+    }
+}

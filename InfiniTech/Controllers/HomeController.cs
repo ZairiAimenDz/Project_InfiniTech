@@ -106,8 +106,18 @@ namespace InfiniTech.Controllers
             {
                 return NotFound();
             }
+            var viewmodel = new ProductDetailsViewModel() {
+                ProdDetails = product,
+                OtherProducts = await productrepo.GetRandomProductsList(),
+            };
 
-            return View(product);
+            return View(viewmodel);
+        }
+
+        [Route("/CompareProducts")]
+        public IActionResult CompareProducts([FromQuery] Guid ID)
+        {
+            return View(ID);
         }
 
         [Route("/Catalogue")]

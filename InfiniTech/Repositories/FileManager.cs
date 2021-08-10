@@ -63,7 +63,7 @@ namespace InfiniTech.Repositories
                     await file.CopyToAsync(fileStream);
                 }
             }
-            return "images/" + uniqueFileName;
+            return uniqueFileName;
         }
     }
 }

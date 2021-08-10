@@ -44,14 +44,24 @@
                 <p class="font-weight-bold"><a href="@Url.Action("Details",new { Id=item.ID })">@item.Name</a></p>
             </div>
             <div class="col-sm-2 text-right">
-                <p>@item.Price $</p>
+                <p>@item.Price @Constants.Currency</p>
             </div>
         </div>
     }
 </div>
 <div class="py-4 text-right">
-    <p> Total : @Model.OrderedProduct.Sum(p => p.Price) $</p>
+    <p> Product Total : @Model.OrderedProduct.Sum(p => p.Price) @Constants.Currency</p>
 </div>
+@if (Model.Order.DeliveryIncluded)
+{
+    <div class="py-4 text-right">
+        <p> Delivery : @Constants.DeliveryFee @Constants.Currency</p>
+    </div>
+
+    <div class="py-4 text-right">
+        <p> Total : @Model.Order.Total @Constants.Currency</p>
+    </div>
+}
 <div class="p-4 border rounded shadow-sm">
     <p class="mb-0">Payment Method : @Model.Order.BuyerDetails.PaymentMethod</p>
     @if (!string.IsNullOrEmpty(Model.Order.BuyerDetails.PaymentEvidenceImg))

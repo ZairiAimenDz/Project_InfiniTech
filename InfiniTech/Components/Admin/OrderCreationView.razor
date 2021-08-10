@@ -12,7 +12,7 @@
         {
             <div class="col-sm-2">
                 <img height="32" src="/images/@item.ThumbnailURL" />
-                <p>@item.Name - @item.Price  $</p>
+                <p>@item.Name - @item.Price  @Constants.Currency</p>
                 <button class="btn btn-success" @onclick="() => { OrderedProducts.Add(new() { Product = item, ProductId = item.ID }); }">Add To List</button>
             </div>
         }
@@ -29,7 +29,7 @@
                     <img class="w-100" src="/images/@item.Product.ThumbnailURL" />
                 </div>
                 <div class="col-5">
-                    @item.Product.Name - @item.Product.Price $
+                    @item.Product.Name - @item.Product.Price @Constants.Currency
                 </div>
                 <div class="col-4">
                     <button class="btn btn-danger" @onclick="()=> { OrderedProducts.Remove(item); }">Remove</button>
@@ -40,7 +40,7 @@
 </div>
 
 <div class="bg-white p-3 my-3">
-    <h3>Total : @OrderedProducts.Sum(o => o.Product.Price) $</h3>
+    <h3>Total : @OrderedProducts.Sum(o => o.Product.Price) @Constants.Currency</h3>
 </div>
 
 <EditForm Model="@OrderModel" OnValidSubmit="@OnValidSubmit">

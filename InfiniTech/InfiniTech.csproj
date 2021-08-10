@@ -18,6 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazored.TextEditor" Version="1.0.3" />
+    <PackageReference Include="Blazored.Typeahead" Version="4.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.8" />

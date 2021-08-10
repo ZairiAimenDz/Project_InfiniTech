@@ -15,6 +15,7 @@ namespace Domain
         [Required]
         public string OrderPhone { get; set; }
         public double Total { get; set; }
+        public bool DeliveryIncluded { get; set; }
         public DateTime OrderDate { get; set; }
         public DeliveryState State { get; set; }
         public List<OrderedProduct> OrderedProducts { get; set; }

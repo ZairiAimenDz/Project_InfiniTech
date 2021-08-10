@@ -58,7 +58,7 @@
     @foreach (var item in Model.RandomProducts.Take(4))
     {
         <component type="typeof(InfiniTech.Components.Shared.ProductCard)" render-mode="ServerPrerendered"
-                   param-name='@item.Name' param-price="@item.Price"
+                   param-name='@item.Name' param-price="@item.Price" param-oldprice="@item.OldPrice"
                    param-ProductImgURL='@(Url.Content("~/images/"+item.ThumbnailURL))' param-id='@item.ID'
                    param-Category='@item.Category.Name' param-ProductBrand='@item.Brand.Name'
                    param-Description='@item.ShortDescription' />
@@ -74,7 +74,7 @@
     @foreach (var item in Model.LatestProducts.Take(4))
     {
         <component type="typeof(InfiniTech.Components.Shared.ProductCard)" render-mode="ServerPrerendered"
-                   param-name='@item.Name' param-price="@item.Price"
+                   param-name='@item.Name' param-price="@item.Price"  param-oldprice="@item.OldPrice"
                    param-ProductImgURL='@(Url.Content("~/images/"+item.ThumbnailURL))' param-id='@item.ID'
                    param-Category='@item.Category.Name' param-ProductBrand='@item.Brand.Name'
                    param-Description='@item.ShortDescription' />

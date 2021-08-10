@@ -57,7 +57,7 @@
         @foreach (var item in Model.Products)
         {
             <component type="typeof(InfiniTech.Components.Shared.ProductCard)" render-mode="Static"
-                       param-name='@item.Name' param-price="@item.Price"
+                       param-name='@item.Name' param-price="@item.Price" param-oldprice="@item.OldPrice"
                        param-ProductImgURL='@(Url.Content("~/images/"+item.ThumbnailURL))' param-id="@item.ID"
                        param-Category='@item.Category.Name'
                        param-Description='@item.ShortDescription' />

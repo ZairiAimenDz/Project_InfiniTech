@@ -14,60 +14,29 @@
 <p>
     <a class="btn btn-primary" asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().NumberInStock)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().isStockUnlimited)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Brand.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberInStock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isStockUnlimited)
-            </td>
-            <td>
-                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.ID">Edit</a> 
-                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.ID">Details</a> 
-                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
+
+<div class="row border-bottom border-bottom-dark p-2">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-3">Name</div>
+    <div class="col-sm-2">Price &amp; Condition</div>
+    <div class="col-sm-3">Brand &amp; Category</div>
+    <div class="col-sm-1">Number In Stock</div>
+    <div class="col-sm-2">Actions</div>
+</div>
+
+@foreach (var item in Model)
+{
+    <component type="typeof(InfiniTech.Components.Admin.ProductManagement)"
+               render-mode="Server"
+               param-deleteurl="@Url.Action("Delete", "Products", new {item.ID})"
+               param-detailsurl="@Url.Action("Details", "Home", new {item.ID})"
+               param-id="@item.ID" param-Name="@item.Name"
+               param-ThumbnailUrl="@item.ThumbnailURL" param-Condition="@item.ProductCondition"
+               param-Price="@item.Price" param-BrandName="@item.Brand.Name"
+               param-CategoryName="@item.Category.Name" param-Numberinstock="@item.NumberInStock"
+               param-isvisible="@item.isVisible"
+               />
 }
-    </tbody>
-</table>
 
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">      
