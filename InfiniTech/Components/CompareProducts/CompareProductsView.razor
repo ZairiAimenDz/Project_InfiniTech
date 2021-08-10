@@ -6,14 +6,16 @@
     <div class="text-center mb-5">
         <h2>Search For Products To Compare</h2>
         <BlazoredTypeahead SearchMethod="SearchProducts"
-                           @bind-Value="SelectedFilm">
+                           @bind-Value="SelectedProduct"
+                           placeholder="Search by name...">
             <SelectedTemplate>
                 @context.Name
             </SelectedTemplate>
             <ResultTemplate>
-                @context.Title (@context.Year)
+                @context.Name (@context.Category)
             </ResultTemplate>
         </BlazoredTypeahead>
+        <button @onclick="AddSelectedProduct" class="m-1 p-2 btn btn-success">Compare Product</button>
     </div>
 }
 
@@ -22,7 +24,7 @@
         <th></th>
         @foreach (var item in ComparedProducts)
         {
-            <td>
+            <td class="col-sm-2">
                 @if (ComparedProducts.Count() > 1)
                 {
                     <button @onclick="()=> { ComparedProducts.Remove(item); }" class="btn btn-danger">Remove Element</button>
@@ -34,7 +36,7 @@
         <th></th>
         @foreach (var item in ComparedProducts)
         {
-            <td>
+            <td class="col-sm-2">
                 <img height="64" src="/images/@item.ThumbnailURL" />
             </td>
         }
@@ -43,7 +45,7 @@
         <th>Rating</th>
         @foreach (var item in ComparedProducts)
         {
-            <td>
+            <td class="col-sm-2">
                 4.5/5
             </td>
         }
@@ -52,7 +54,7 @@
         <th>Name</th>
         @foreach (var item in ComparedProducts)
         {
-            <td>
+            <td class="col-sm-2">
                 @item.Name
             </td>
         }
@@ -61,7 +63,7 @@
         <th>Details</th>
         @foreach (var item in ComparedProducts)
         {
-            <td>
+            <td class="col-sm-2">
                 <p>Cateogry : @item.Category.Name</p>
                 <p>Brand : @item.Brand.Name</p>
                 <p>Condition : @item.ProductCondition</p>
@@ -73,7 +75,7 @@
         <th>Description / Specs</th>
         @foreach (var item in ComparedProducts)
         {
-            <td>
+            <td class="col-sm-2">
                 @((MarkupString)item.Description)
             </td>
         }
@@ -91,7 +93,8 @@
     [Parameter]
     public Guid ID { get; set; }
     public List<Product> ComparedProducts { get; set; } = new();
-    
+
+    private Product SelectedProduct { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -100,6 +103,15 @@
 
     private async Task<IEnumerable<Product>> SearchProducts(string searchText)
     {
-        return await _repo.GetProductsList(new() {SearchTerm=searchText});
+        return await _repo.GetProductsList(new() { SearchTerm = searchText });
     }
+
+
+    private Task AddSelectedProduct()
+    {
+        if(SelectedProduct!=null && !ComparedProducts.Contains(SelectedProduct))
+            ComparedProducts.Add(SelectedProduct);
+        return Task.CompletedTask;
+    }
+
 }
