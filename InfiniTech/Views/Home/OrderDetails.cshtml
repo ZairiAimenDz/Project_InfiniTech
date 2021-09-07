@@ -66,8 +66,11 @@
     <p class="mb-0">Payment Method : @Model.Order.BuyerDetails.PaymentMethod</p>
     @if (!string.IsNullOrEmpty(Model.Order.BuyerDetails.PaymentEvidenceImg))
     {
-        <img src="/images/@Model.Order.BuyerDetails.PaymentEvidenceImg" />
+        <img class="w-50" src="/images/@Model.Order.BuyerDetails.PaymentEvidenceImg" />
     }
 </div>
 
 <!-- TODO : Payment Evidence Using Blazor -->
+<component type="typeof(ContinuePayment)" render-mode="Server"
+           param-Id="@Model.Order.BuyerDetails.ID"
+           param-orderid="@Model.Order.Id"/>

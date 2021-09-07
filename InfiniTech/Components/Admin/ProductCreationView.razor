@@ -90,10 +90,10 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="font-weight-bold text-dark">Category</label>
-                            <select @bind="ProductModel.CategoryId" class="form-control">
+                            <select  @bind="ProductModel.CategoryId" class="form-control">
                                 @foreach (var item in Categories)
                                 {
-                                    <option value="@item.Id">
+                                    <option selected="@(Categories.FirstOrDefault()==item)" value="@item.Id">
                                         @item.Name
                                     </option>
                                 }
@@ -107,7 +107,7 @@
                             <select @bind="ProductModel.BrandId" class="form-control">
                                 @foreach (var item in Brands)
                                 {
-                                    <option value="@item.Id">
+                                    <option selected="@(Brands.FirstOrDefault()==item)" value="@item.Id">
                                         @item.Name
                                     </option>
                                 }
@@ -189,7 +189,8 @@
     {
         await LoadBrands();
         await LoadCateogries();
-
+        ProductModel.CategoryId = Categories.FirstOrDefault().Id;
+        ProductModel.BrandId = Brands.FirstOrDefault().Id;
     }
 
     public async Task LoadCateogries()
@@ -242,7 +243,7 @@
     {
         if (ImageFiles.Count() > 0)
         {
-            if (Main == null)
+            if (Main.File == null)
                 Main = ImageFiles.FirstOrDefault();
 
             ImageFiles.Remove(Main);
@@ -255,13 +256,14 @@
             }
             ProductModel.ProductImages = ProductImages;
             ProductModel.ID = Guid.NewGuid();
+            ProductModel.DateAdded = DateTime.Now;
             ProductModel.Description = await GetHtml();
             ProductModel.ThumbnailURL = await _fileManager.UploadImage(Main.File);
 
-            await _productrepo.AddProductAsync(ProductModel);
+            _productrepo.AddProduct(ProductModel);
             await _productrepo.SaveAsync();
 
-            navMng.NavigateTo("/Details/" + ProductModel.ID);
+            navMng.NavigateTo("/Details/" + ProductModel.ID,forceLoad:true);
         }
         else
         {

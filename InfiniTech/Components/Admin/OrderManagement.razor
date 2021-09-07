@@ -73,7 +73,8 @@
             isfinished = true;
             foreach (var item in _context.OrderedProducts.Where(o=>o.OrderId == OrderId).ToList())
             {
-
+                var product = await _context.Products.FindAsync(item.ProductId);
+                product.NumberInStock--;
             }
             await _context.SaveChangesAsync();
         }

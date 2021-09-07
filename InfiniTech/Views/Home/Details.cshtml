@@ -5,6 +5,8 @@
     ViewData["Title"] = Model.ProdDetails.Name;
 }
 
+<link rel="stylesheet" href="_content/Radzen.Blazor/css/default-base.css">
+<script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
 
 <div class="row mb-2">
     <div class="col-6">
@@ -38,7 +40,12 @@
             </a>
         </div>
     </div>
-    <div class="col-6 p-4 text-left">
+    <div class="col-6 px-4 text-left">
+        
+        <p>
+            <component type="typeof(Radzen.Blazor.RadzenRating)"
+                       param-ReadOnly="true" param-Stars="5" param-Value="@((int)Model.ProdDetails.rating)" render-mode="Server" /> @Model.ProdDetails.rating (@Model.ProdDetails.ratingnum Reviews)
+                </p>
         <hr class="my-3" />
         <h3 class="mb-4 font-weight-bolder">@Html.DisplayFor(model => model.ProdDetails.Name)</h3>
         <p class="mb-0"><b>Category :</b><a class="btn m-0 p-0" href="@Url.Action("AllProducts","Home",new Application.Dtos.Product.ProductParameters() {Categoryid=Model.ProdDetails.CategoryId })">@Html.DisplayFor(model => model.ProdDetails.Category.Name)</a></p>
@@ -60,7 +67,7 @@
         <br />
         @if (User.Identity.IsAuthenticated)
         {
-            <component type="typeof(InfiniTech.Components.Shared.WishlistButton)" param-ItemID="@Model.ProdDetails.ID" param-userid="@User.Claims.FirstOrDefault().Value" render-mode="Server" />
+            <component type="typeof(WishlistButton)" param-ItemID="@Model.ProdDetails.ID" param-userid="@User.Claims.FirstOrDefault().Value" render-mode="Server" />
         }
     </div>
 </div>
@@ -85,5 +92,16 @@
 <div class="p-3">
     <h3>Description</h3>
     <p class="mb-3">@Html.Raw(Model.ProdDetails.Description)</p>
+</div>
+
+
+
+<div class="p-3">
+    <h3>Reviews</h3>
+    <component type="typeof(ProductReviews)"
+               render-mode="Server"
+               param-productid="@Model.ProdDetails.ID"
+               param-userid="@(User.Identity.IsAuthenticated?User.Claims.FirstOrDefault().Value:null)"
+               param-islogged="@User.Identity.IsAuthenticated"/>
 </div>
 

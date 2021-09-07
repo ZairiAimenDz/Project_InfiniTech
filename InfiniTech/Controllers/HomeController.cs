@@ -107,7 +107,7 @@ namespace InfiniTech.Controllers
                 return NotFound();
             }
 
-            product.views++;
+            product.Views++;
             productrepo.UpdateProduct(product);
             await productrepo.SaveAsync();
             

@@ -158,7 +158,7 @@
             await storage.SetAsync("cartitems", null);
             items = new List<Guid>() { };
             cartitems = new List<Product>() { };
-            NavigationManager.NavigateTo(RedirectURL + "/" + order.Id, forceLoad: true);
+            NavigationManager.NavigateTo("/OrderDetails/" + order.Id, forceLoad: true);
         }
 
     }

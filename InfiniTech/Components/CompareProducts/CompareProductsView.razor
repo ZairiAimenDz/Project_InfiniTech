@@ -12,7 +12,14 @@
                 @context.Name
             </SelectedTemplate>
             <ResultTemplate>
-                @context.Name (@context.Category)
+                <div class="row">
+                    <div class="col-2">
+                        <img class="w-50" src="/images/@context.ThumbnailURL"/>
+                    </div>
+                    <div class="col-10 text-center">
+                        <p>@context.Name</p> <p>@context.Category.Name</p>
+                    </div>
+                </div>
             </ResultTemplate>
         </BlazoredTypeahead>
         <button @onclick="AddSelectedProduct" class="m-1 p-2 btn btn-success">Compare Product</button>
@@ -46,7 +53,7 @@
         @foreach (var item in ComparedProducts)
         {
             <td class="col-sm-2">
-                4.5/5
+                @item.rating/5 (@item.ratingnum)
             </td>
         }
     </tr>

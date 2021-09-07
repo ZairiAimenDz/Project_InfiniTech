@@ -11,16 +11,16 @@ namespace InfiniTech.Models
         public static string connectionString = "InfiniTechDb";
         public static string Website_Name = "InfiniTech";
         public static string Website_Logo = "ITLogo.png";
-        public static string Currency = "$";
-        public static double DeliveryFee = 20;
+        public static string Currency = "DA";
+        public static double DeliveryFee = 2200;
 
         // WebSite For Selling Sports Gear
-/*        public static string Website_Name = "MountainGear";
+        /*public static string Website_Name = "MountainGear";
         public static string Website_Logo = "MGLogo.png";
         public static string Currency = "€";
-        public static double DeliveryFee = 40;
-        public static string connectionString = "MountainGearDb";*/
-
+        public static double DeliveryFee = 40;*/
+/*        public static string connectionString = "MountainGearDb";
+*/
 
         public static string AddressLine1 = "Store address line1"; // Exact Address
         public static string AddressLine2 = "Wilaya, Algeria"; // Willaya/State, Country

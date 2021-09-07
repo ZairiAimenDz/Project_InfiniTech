@@ -45,7 +45,10 @@ namespace Domain
         //
         [Required]
         public int NumberInStock { get; set; }
-        public long views { get; set; }
+        public long Views { get; set; }
+        public double rating { get; set; }
+        public long ratingnum { get; set; }
+        public List<Review> Reviews { get; set; }
     }
 
     public enum ProductCondition

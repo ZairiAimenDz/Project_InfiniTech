@@ -127,6 +127,7 @@
         {
             OrderModel.OrderedProducts = OrderedProducts.ToList();
             OrderModel.OrderDate = DateTime.Now;
+            OrderModel.BuyerDetails.PaymentEvidenceImg = await fileManager.UploadImage(ImageFile);
             OrderModel.Total = OrderedProducts.Sum(o => o.Product.Price);
             _context.Orders.Add(OrderModel);
             /// TODO : Send Email To The Receiver
