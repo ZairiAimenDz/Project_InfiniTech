@@ -83,7 +83,7 @@ namespace InfiniTech.Controllers
         public async Task<IActionResult> UserWishList([FromQuery] int pagenum = 1)
         {
             var wishlisted = await _context.UserLikedProducts.Where(o => o.ApplicationUserId == User.Claims.FirstOrDefault().Value)
-                                        .OrderBy(o=>o.ProductId).Skip((pagenum-1)*9).Take(12).ToListAsync();
+                                        .OrderBy(o => o.ProductId).Skip((pagenum - 1) * 9).Take(12).ToListAsync();
             var products = new List<Product>();
             wishlisted.ForEach(o => products.Add(productrepo.GetProduct(o.ProductId)));
 
@@ -110,10 +110,17 @@ namespace InfiniTech.Controllers
             product.Views++;
             productrepo.UpdateProduct(product);
             await productrepo.SaveAsync();
-            
-            var viewmodel = new ProductDetailsViewModel() {
+
+            var viewmodel = new ProductDetailsViewModel()
+            {
                 ProdDetails = product,
-                OtherProducts = await productrepo.GetRandomProductsList(),
+                OtherProducts = await productrepo.GetProductsList(
+                    new ProductParameters()
+                    {
+                        Categoryid = product.CategoryId,
+                        PageSize = 4
+                    }
+                ),
             };
 
             return View(viewmodel);

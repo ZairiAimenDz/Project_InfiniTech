@@ -27,7 +27,7 @@
         @if (Model.Announcements.Count() >= 1)
         {
             <div class="carousel-item active">
-                <a href="#">
+                <a href="@Model.Announcements.First().Link">
                     <img src="/images/@Model.Announcements.First().Image" class="d-block w-100" alt="...">
                 </a>
             </div>
@@ -35,7 +35,9 @@
         @foreach (var item in Model.Announcements.Skip(1))
         {
             <div class="carousel-item">
-                <img src="/images/@item.Image" class="d-block w-100" alt="...">
+                <a href="@item.Link">
+                    <img src="/images/@item.Image" class="d-block w-100" alt="...">
+                </a>
             </div>
         }
     </div>
@@ -51,7 +53,7 @@
 
 
 <div class="mb-3" style="display:flex;">
-    <h3 class="flex-grow-1">Random Products</h3>
+    <h3 class="flex-grow-1">Top Selling Products</h3>
     <a class="text-right" asp-controller="Home" asp-action="AllProducts">View All</a>
 </div>
 <div class="mb-5" style="display: grid;grid-template-columns: repeat(auto-fit, minmax(min(100%, 17em), 1fr));">
@@ -74,7 +76,7 @@
     @foreach (var item in Model.LatestProducts.Take(4))
     {
         <component type="typeof(InfiniTech.Components.Shared.ProductCard)" render-mode="ServerPrerendered"
-                   param-name='@item.Name' param-price="@item.Price"  param-oldprice="@item.OldPrice"
+                   param-name='@item.Name' param-price="@item.Price" param-oldprice="@item.OldPrice"
                    param-ProductImgURL='@(Url.Content("~/images/"+item.ThumbnailURL))' param-id='@item.ID'
                    param-Category='@item.Category.Name' param-ProductBrand='@item.Brand.Name'
                    param-Description='@item.ShortDescription' />

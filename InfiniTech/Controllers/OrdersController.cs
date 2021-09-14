@@ -24,12 +24,15 @@ namespace InfiniTech.Controllers
 
         // GET: Orders
         [HttpGet("")]
-
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Guid? OrderCode)
         {
             /// TODO : Add Pagination - Maybe With The Clean Code Structure
-            var orders = await _context.Orders.Include(o => o.BuyerDetails).ToListAsync();
-            return View(orders);
+            var orders = _context.Orders.Include(o => o.BuyerDetails).AsQueryable();
+            if (OrderCode != null)
+            {
+                orders = OrderCode != Guid.Empty ? orders.Where(o => o.Id == OrderCode) : orders;
+            }
+            return View(await orders.ToListAsync());
         }
 
 

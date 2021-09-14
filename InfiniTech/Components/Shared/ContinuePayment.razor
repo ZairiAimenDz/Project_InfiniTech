@@ -57,7 +57,8 @@
         }
         catch { }
         Model.PaymentEvidenceImg = await filemanager.UploadImage(ImageFile);
-
+        var order = await context.Orders.FindAsync(OrderId);
+        order.State = DeliveryState.ForCheckUp;
         context.Update(Model);
         await context.SaveChangesAsync();
         navman.NavigateTo("/OrderDetails/"+OrderId,true);

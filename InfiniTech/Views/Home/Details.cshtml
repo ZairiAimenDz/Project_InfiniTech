@@ -41,35 +41,39 @@
         </div>
     </div>
     <div class="col-6 px-4 text-left">
-        
+
         <p>
             <component type="typeof(Radzen.Blazor.RadzenRating)"
                        param-ReadOnly="true" param-Stars="5" param-Value="@((int)Model.ProdDetails.rating)" render-mode="Server" /> @Model.ProdDetails.rating (@Model.ProdDetails.ratingnum Reviews)
                 </p>
-        <hr class="my-3" />
-        <h3 class="mb-4 font-weight-bolder">@Html.DisplayFor(model => model.ProdDetails.Name)</h3>
-        <p class="mb-0"><b>Category :</b><a class="btn m-0 p-0" href="@Url.Action("AllProducts","Home",new Application.Dtos.Product.ProductParameters() {Categoryid=Model.ProdDetails.CategoryId })">@Html.DisplayFor(model => model.ProdDetails.Category.Name)</a></p>
-        <p class="mb-0"><b>Brand :</b><a class="btn m-0 p-0" href="@Url.Action("AllProducts","Home",new Application.Dtos.Product.ProductParameters() {BrandId=Model.ProdDetails.BrandId})">@Html.DisplayFor(model => model.ProdDetails.Brand.Name)</a></p>
-        <p class="mb-0"><b>Condition :</b>@Html.DisplayFor(model => model.ProdDetails.ProductCondition)</p>
-        <p class="mb-0"><b>Units Left :</b>@Html.DisplayFor(model => model.ProdDetails.NumberInStock)</p>
-        <p><b>Color :</b>@Html.DisplayFor(model => model.ProdDetails.Color)</p>
-        <p class="mb-3">@Html.DisplayFor(model => model.ProdDetails.ShortDescription)</p>
-        <p class="text-danger">@Html.DisplayFor(model => model.ProdDetails.Price) @Constants.Currency</p>
-        <a class="btn btn-info" asp-controller="Home" asp-action="CompareProducts" asp-route-id="@Model.ProdDetails.ID"><i class="fas fa-greater-than-equal"></i> Compare Product</a>
-        @if (Model.ProdDetails.NumberInStock > 0)
-        {
-            <component type="typeof(InfiniTech.Components.Cart.CartButton)" param-ItemID="@Model.ProdDetails.ID" render-mode="Server" />
-        }
-        else
-        {
-            <p>Product UnAvailable</p>
-        }
-        <br />
-        @if (User.Identity.IsAuthenticated)
-        {
-            <component type="typeof(WishlistButton)" param-ItemID="@Model.ProdDetails.ID" param-userid="@User.Claims.FirstOrDefault().Value" render-mode="Server" />
-        }
-    </div>
+                <hr class="my-3" />
+                <h3 class="mb-4 font-weight-bolder">@Html.DisplayFor(model => model.ProdDetails.Name)</h3>
+                <p class="mb-0"><b>Category :</b><a class="btn m-0 p-0" href="@Url.Action("AllProducts","Home",new Application.Dtos.Product.ProductParameters() {Categoryid=Model.ProdDetails.CategoryId })">@Html.DisplayFor(model => model.ProdDetails.Category.Name)</a></p>
+                <p class="mb-0"><b>Brand :</b><a class="btn m-0 p-0" href="@Url.Action("AllProducts","Home",new Application.Dtos.Product.ProductParameters() {BrandId=Model.ProdDetails.BrandId})">@Html.DisplayFor(model => model.ProdDetails.Brand.Name)</a></p>
+                <p class="mb-0"><b>Condition :</b>@Html.DisplayFor(model => model.ProdDetails.ProductCondition)</p>
+                <p class="mb-0"><b>Units Left :</b>@Html.DisplayFor(model => model.ProdDetails.NumberInStock)</p>
+                <p><b>Color :</b>@Html.DisplayFor(model => model.ProdDetails.Color)</p>
+                <p class="mb-3">@Html.DisplayFor(model => model.ProdDetails.ShortDescription)</p>
+                @if (Model.ProdDetails.OldPrice > 0)
+                {
+                    <p class="text-danger" style="text-decoration:line-through;">@Html.DisplayFor(model => model.ProdDetails.OldPrice) @Constants.Currency</p>
+                }
+                <p class="text-danger">@Html.DisplayFor(model => model.ProdDetails.Price) @Constants.Currency</p>
+                <a class="btn btn-info" asp-controller="Home" asp-action="CompareProducts" asp-route-id="@Model.ProdDetails.ID"><i class="fas fa-greater-than-equal"></i> Compare Product</a>
+                @if (Model.ProdDetails.NumberInStock > 0)
+                {
+                    <component type="typeof(InfiniTech.Components.Cart.CartButton)" param-ItemID="@Model.ProdDetails.ID" render-mode="Server" />
+                }
+                else
+                {
+                    <p>Product UnAvailable</p>
+                }
+                <br />
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <component type="typeof(WishlistButton)" param-ItemID="@Model.ProdDetails.ID" param-userid="@User.Claims.FirstOrDefault().Value" render-mode="Server" />
+                }
+            </div>
 </div>
 
 

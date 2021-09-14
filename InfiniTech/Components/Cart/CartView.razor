@@ -86,8 +86,8 @@
     public string UserID { get; set; }
 
     public BuyerDetails Details { get; set; } = new();
-    public string address { get; set; }
-    public string phoneNumber { get; set; }
+    public string address { get; set; } = "";
+    public string phoneNumber { get; set; } = "";
 
     [Parameter]
     public string RedirectURL { get; set; }

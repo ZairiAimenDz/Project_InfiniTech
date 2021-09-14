@@ -4,6 +4,8 @@
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>aspnet-InfiniTech-EB743031-C6D5-4A3F-80EB-02B584E7B99A</UserSecretsId>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+    <RootNamespace>InfiniTech</RootNamespace>
+    <AssemblyName>InfiniTech</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
