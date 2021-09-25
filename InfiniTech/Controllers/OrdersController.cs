@@ -27,7 +27,7 @@ namespace InfiniTech.Controllers
         public async Task<IActionResult> Index(Guid? OrderCode)
         {
             /// TODO : Add Pagination - Maybe With The Clean Code Structure
-            var orders = _context.Orders.Include(o => o.BuyerDetails).AsQueryable();
+            var orders = _context.Orders.Include(o => o.BuyerDetails).Where(o=>o.State<DeliveryState.isFinished);
             if (OrderCode != null)
             {
                 orders = OrderCode != Guid.Empty ? orders.Where(o => o.Id == OrderCode) : orders;

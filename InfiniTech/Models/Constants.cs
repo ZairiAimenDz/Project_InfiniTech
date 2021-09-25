@@ -15,15 +15,12 @@ namespace InfiniTech.Models
                 public static double DeliveryFee = 2200;*/
 
         // WebSite For Selling Sports Gear
-        public static string Website_Name = "MountainGear";
-        public static string Website_Logo = "MGLogo.png";
+        public static string Website_Name = "KingShop";
+        public static string Website_Logo = "K.png";
         public static string Currency = "DZD";
-        public static double DeliveryFee = 800;
+        public static double DeliveryFee = 0;
         public static string connectionString = "MountainGearDb";
 
-
-        public static string AddressLine1 = "Store address line1"; // Exact Address
-        public static string AddressLine2 = "Wilaya, Algeria"; // Willaya/State, Country
-        public static string ContactPhone = "+213 12 34 56 789";
+        public static string Email = "elking.shopping@gmail.com";
     }
 }

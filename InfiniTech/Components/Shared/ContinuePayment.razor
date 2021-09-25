@@ -51,17 +51,17 @@
         try
         {
             if (!string.IsNullOrEmpty(Model.PaymentEvidenceImg))
-            {
                 filemanager.DeleteFile(Model.PaymentEvidenceImg);
-            }
+
+            if (ImageFile != null)
+                Model.PaymentEvidenceImg = await filemanager.UploadImage(ImageFile);
         }
         catch { }
-        Model.PaymentEvidenceImg = await filemanager.UploadImage(ImageFile);
         var order = await context.Orders.FindAsync(OrderId);
         order.State = DeliveryState.ForCheckUp;
         context.Update(Model);
         await context.SaveChangesAsync();
-        navman.NavigateTo("/OrderDetails/"+OrderId,true);
+        navman.NavigateTo("/OrderDetails/" + OrderId, true);
     }
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)

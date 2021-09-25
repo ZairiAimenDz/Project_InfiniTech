@@ -21,6 +21,8 @@ namespace Domain
     public enum PaymentMethod
     {
         CCP,
-        Hand_to_Hand
+        Hand_to_Hand,
+        Payment_On_Delivery,
+        CheckOut_At_Store
     }
 }
