@@ -1,0 +1,50 @@
+﻿@inject ApplicationDbContext context
+<div class="mt-2">
+    @if (isadded)
+    {
+        <div class="alert alert-info" role="alert">
+            Item In Wishlist <i class="fas fa-check-circle"></i>
+        </div>
+        <button @onclick="removeEltFromWishlist" class="btn btn-outline-danger"><i class="fas fa-trash"></i> Remove From WishList</button>
+    }
+    else
+    {
+        <button @onclick="addElementToWishlist" class="btn btn-info"><i class="fas fa-heart"></i> Add To WishList</button>
+    }
+</div>
+
+@code{
+    [Parameter]
+    public Guid ItemID { get; set; }
+    [Parameter]
+    public string userid { get; set; }
+
+    public bool isadded { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        var elt = context.UserLikedProducts.FirstOrDefault(o => o.ProductId == ItemID && o.ApplicationUserId == userid);
+        isadded = elt != null;
+        return Task.CompletedTask;
+    }
+
+    private async void addElementToWishlist()
+    {
+        var elt = new UserFavProduct()
+        {
+            ApplicationUserId = userid,
+            ProductId = ItemID
+        };
+        context.Add(elt);
+        isadded = true;
+        await context.SaveChangesAsync();
+    }
+
+    private async void removeEltFromWishlist()
+    {
+        var elt = context.UserLikedProducts.FirstOrDefault(o => o.ProductId == ItemID && o.ApplicationUserId == userid);
+        context.Remove(elt);
+        isadded = false;
+        await context.SaveChangesAsync();
+    }
+}

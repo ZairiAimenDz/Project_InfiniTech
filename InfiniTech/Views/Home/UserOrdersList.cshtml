@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Domain.Order>
+@{
+    ViewData["Title"] = "Orders List";
+}
+
+<h1>Orders List</h1>
+<div class="p-2 my-4">
+    @foreach (var item in Model)
+    {
+        <a class="my-2 btn border-bottom" href="/OrderDetails/@item.Id">
+            <div class="row">
+                <div class="col-sm-3">
+                    Order Date :
+                    @item.OrderDate
+                </div>
+                <div class="col-sm-3">
+                    Order Code :
+                    @item.Id
+                </div>
+                <div class="col-sm-3">
+                    Total :
+                    @item.Total
+                </div>
+                <div class="col-sm-3">
+                    Order State :
+                    @item.State
+                </div>
+            </div>
+        </a>
+    }
+    <nav aria-label="Page navigation example mt-2">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(ViewBag.hasprev?"":"disabled")">
+                <a class="page-link" asp-route-pagenum="@(ViewBag.currentpage-1)">&laquo; Previous</a>
+            </li>
+            <li class="page-item @(ViewBag.hasnext?"":"disabled")">
+                <a class="page-link" asp-route-pagenum="@(ViewBag.currentpage+1)">Next &raquo;</a>
+            </li>
+        </ul>
+    </nav>
+</div>

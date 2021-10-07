@@ -1,0 +1,280 @@
+﻿@inject IProductRepository _productrepo
+@inject ICategoryRepository _categoryRepo
+@inject IBrandRepository _brandRepo
+@inject IFileManager _fileManager
+@using Blazored.TextEditor
+@inject NavigationManager navMng
+@inject IJSRuntime JSRuntime
+
+
+<EditForm Model="ProductModel" OnValidSubmit="ValidSubmit">
+    <p class="text-danger">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    </p>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="m-1 p-4 bg-white rounded">
+                <h1 class="font-weight-bold text-dark">@ProductModel.Name</h1>
+                <h2 class="font-weight-bold text-dark">Product Images</h2>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Add Images</label>
+                    <div class="col-sm-10">
+                        <InputFile OnChange="@OnInputFileChange" class="form-control" multiple />
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (var item in ImageFiles)
+                    {
+                        <div class="col-sm-3 p-1">
+                            <img class="w-100" src="@item.Thumbnail" />
+                            <div class="mt-1">
+                                <button type="button" @onclick="()=>{RemoveImage(item);}" class="btn btn-outline-danger">X</button>
+                                <button type="button" @onclick="()=> { MakeThumbnail(item); }" disabled="@(Main == item)" class="btn @(Main == item?"btn-secondary":"btn-outline-info")">Use As Primary</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="m-1 mt-3 p-4 bg-white rounded">
+                <h2 class="font-weight-bold text-dark">Product Details</h2>
+                <div class="form-group">
+                    <label class="font-weight-bold">Product Name</label>
+                    <input @bind-value="ProductModel.Name" type="text" class="form-control" placeholder="ex. Macbook Pro">
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold">Short Description</label>
+                    <input @bind-value="ProductModel.ShortDescription" type="text" class="form-control" placeholder="ex. Latest Laptop For Designers And Professionals">
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold">Full Description And Specification :</label>
+                    <small>Specifiy All The Details About The Product, Every Component And All Details That The User Can Use To Know If This Product is Right For Him</small>
+                    <BlazoredTextEditor @ref="@QuillHtml">
+                        <ToolbarContent>
+                            <select class="ql-header">
+                                <option selected=""></option>
+                                <option value="1"></option>
+                                <option value="2"></option>
+                                <option value="3"></option>
+                                <option value="4"></option>
+                                <option value="5"></option>
+                            </select>
+                            <span class="ql-formats">
+                                <button class="ql-bold"></button>
+                                <button class="ql-italic"></button>
+                                <button class="ql-underline"></button>
+                                <button class="ql-strike"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <select class="ql-color"></select>
+                                <select class="ql-background"></select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-list" value="ordered"></button>
+                                <button class="ql-list" value="bullet"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-link"></button>
+                            </span>
+                        </ToolbarContent>
+                        <EditorContent>
+                            <h4>Use The Tools To Customize Your Products Description As You Wish</h4>
+                        </EditorContent>
+                    </BlazoredTextEditor>
+                </div>
+            </div>
+            <div class="m-1 mt-3 p-4 bg-white rounded">
+                <h2 class="font-weight-bold text-dark">Product Type</h2>
+                <p>If You Need To Add A Category, Open It In A New Category And Click Reload After Adding it</p>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="font-weight-bold text-dark">Category</label>
+                            <select  @bind="ProductModel.CategoryId" class="form-control">
+                                @foreach (var item in Categories)
+                                {
+                                    <option selected="@(Categories.FirstOrDefault()==item)" value="@item.Id">
+                                        @item.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <button type="button" @onclick="LoadCateogries" class="m-1 btn btn-outline-info">Load Categories</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="font-weight-bold text-dark">Brands</label>
+                            <select @bind="ProductModel.BrandId" class="form-control">
+                                @foreach (var item in Brands)
+                                {
+                                    <option selected="@(Brands.FirstOrDefault()==item)" value="@item.Id">
+                                        @item.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <button type="button" @onclick="LoadBrands" class="m-1 btn btn-outline-info">Load Brands</button>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="font-weight-bold text-dark">Condition</label>
+                            <select @bind="ProductModel.ProductCondition" class="form-control">
+                                @foreach (var item in Enum.GetValues(typeof(ProductCondition)))
+                                {
+                                    <option value="@item">
+                                        @item
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label  class="font-weight-bold text-dark">Color (optional)</label>
+                            <input @bind-value="ProductModel.Color" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="m-1 p-4 bg-white rounded">
+                <h3 class="font-weight-bold text-dark">Visibility</h3>
+                <p>When This is Turned Off The Clients Won't Be Able To See The Product (Can Be Modified Later)</p>
+                <p class="text-dark">Visible <input checked @bind-value="ProductModel.isVisible" type="checkbox" /></p>
+            </div>
+            <div class="m-1 mt-3 p-4 bg-white rounded">
+                <h3 class="font-weight-bold text-dark">Number In Stock</h3>
+                <p>Precise The Number Of Products You Have In Stock, </p>
+                <input @bind-value="ProductModel.NumberInStock" type="number" min="0" class="form-control" />
+            </div>
+            <div class="m-1 mt-3 p-4 bg-white rounded">
+                <h3 class="font-weight-bold text-dark">Price</h3>
+                <label>Purchase Price @Constants.Currency</label>
+                <input @bind-value="ProductModel.PurchasePrice" type="number" step="any" min="0" class="form-control" />
+                <label>Selling Price @Constants.Currency</label>
+                <input @bind-value="ProductModel.Price" type="number" step="any" min="0" class="form-control" />
+                <p class="mb-0 mt-1 text-success">Profit : @(ProductModel.Price - ProductModel.PurchasePrice) @Constants.Currency</p>
+            </div>
+        </div>
+    </div>
+    <div class="p-4 m-1 mt-3 mb-4 bg-white rounded">
+        <button class="btn btn-outline-success" type="submit">Create Product</button>
+    </div>
+</EditForm>
+
+
+
+
+
+@code {
+    public Product ProductModel { get; set; } = new() { isVisible = true };
+    public List<ProductImage> ProductImages { get; set; } = new();
+    public List<ImageFileThumb> ImageFiles { get; set; } = new();
+
+    public ImageFileThumb Main { get; set; } = new();
+
+    public List<Category> Categories { get; set; } = new();
+    public List<Brand> Brands { get; set; } = new();
+
+    [Parameter]
+    public string returnUrl { get; set; }
+
+    BlazoredTextEditor QuillHtml;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBrands();
+        await LoadCateogries();
+        ProductModel.CategoryId = Categories.FirstOrDefault().Id;
+        ProductModel.BrandId = Brands.FirstOrDefault().Id;
+    }
+
+    public async Task LoadCateogries()
+    {
+        Categories = (await _categoryRepo.GetCategoryList()).ToList();
+    }
+
+    public async Task LoadBrands()
+    {
+        Brands = (await _brandRepo.GetBrandsList()).ToList();
+    }
+
+    public void RemoveImage(ImageFileThumb img)
+    {
+        ImageFiles.Remove(img);
+        StateHasChanged();
+    }
+
+    public void MakeThumbnail(ImageFileThumb img)
+    {
+        Main = img;
+        StateHasChanged();
+    }
+
+    public async Task<string> GetHtml()
+    {
+        return await this.QuillHtml.GetHTML();
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var format = "image/png";
+        foreach (var item in e.GetMultipleFiles())
+        {
+            var resized = await item.RequestImageFileAsync(format,
+                200, 200);
+            var buffer = new byte[resized.Size];
+            await resized.OpenReadStream().ReadAsync(buffer);
+            var ImageDataURL = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+            var itm = new ImageFileThumb()
+            {
+                File = item,
+                Thumbnail = ImageDataURL,
+            };
+            ImageFiles.Add(itm);
+        }
+    }
+
+    public async Task ValidSubmit()
+    {
+        if (ImageFiles.Count() > 0)
+        {
+            if (Main.File == null)
+                Main = ImageFiles.FirstOrDefault();
+
+            ImageFiles.Remove(Main);
+            foreach (var img in ImageFiles)
+            {
+                ProductImages.Add(new ProductImage()
+                {
+                    ImageFile = await _fileManager.UploadImage(img.File)
+                });
+            }
+            ProductModel.ProductImages = ProductImages;
+            ProductModel.ID = Guid.NewGuid();
+            ProductModel.DateAdded = DateTime.Now;
+            ProductModel.Description = await GetHtml();
+            ProductModel.ThumbnailURL = await _fileManager.UploadImage(Main.File);
+
+            _productrepo.AddProduct(ProductModel);
+            await _productrepo.SaveAsync();
+
+            navMng.NavigateTo("/Details/" + ProductModel.ID,forceLoad:true);
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<bool>("confirm", "Please Add Images Before Submitting");
+        }
+    }
+
+    public class ImageFileThumb
+    {
+        public IBrowserFile File { get; set; }
+        public string Thumbnail { get; set; }
+        public Guid id { get; set; } = Guid.NewGuid();
+    }
+}

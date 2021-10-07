@@ -7,7 +7,7 @@ namespace Application.Dtos.Shared
     public class BasePaginationParameters
     {
         internal virtual int MaxPageSize { get; } = 20;
-        internal virtual int DefaultPageSize { get; set; } = 10;
+        internal virtual int DefaultPageSize { get; set; } = 12;
 
         public virtual int PageNumber { get; set; } = 1;
 

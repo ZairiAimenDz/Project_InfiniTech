@@ -5,9 +5,8 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<component type="typeof(InfiniTech.Components.Admin.OrderCreationView)"
-           render-mode="ServerPrerendered"/>
-
+<component type="typeof(InfiniTech.Components.Admin.OrderCreationView)" render-mode="Server"
+           param-returnurl="@Url.Action("Index","Order")"/>
 <div class="my-3">
     <a class="btn btn-success" asp-action="Index">Back to List</a>
 </div>

@@ -1,0 +1,36 @@
+﻿@inject ProtectedLocalStorage storage
+
+<li class="nav-item active">
+    <a class="nav-link" href="@CartURL" style="position:relative;">
+        <i class="fas fa-shopping-basket"></i><span style="background-color: yellow;
+            border-radius: 50%;
+            height: 13px;
+            width: 13px;
+            font-size: 9px;
+            font-weight: bold;
+            margin-left: -8px;
+            position: absolute;
+            text-align: center;
+            top: 24px;">@cartitems</span> Cart
+    </a>
+</li>
+
+@code{
+    [Parameter]
+    public string CartURL { get; set; } = "";
+
+    public int cartitems { get; set; } = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var itemsarr = await storage.GetAsync<Guid[]>("cartitems");
+        if (itemsarr.Success && itemsarr.Value is not null)
+        {
+            cartitems = itemsarr.Value.ToList().Count();
+        }
+        else
+        {
+            cartitems = 0;
+        }
+    }
+}

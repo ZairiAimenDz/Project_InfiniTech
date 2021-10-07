@@ -1,32 +1,39 @@
 ﻿@inject ProtectedLocalStorage storage
 
-<button @onclick="saveElementtoCart" class="btn btn-warning"><i class="fas fa-cart-plus"></i> Add To Cart</button>
-
 @if (isadded)
 {
     <div class="alert alert-primary mt-2" role="alert">
         Item Added To The Cart <i class="fas fa-check-circle"></i>
     </div>
 }
+else
+{
+    <button @onclick="saveElementtoCart" class="btn btn-warning"><i class="fas fa-cart-plus"></i> Add To Cart</button>
+}
 
 
 @code{
     [Parameter]
     public Guid ItemID { get; set; }
-    bool isadded = false;
+    public bool isadded { get; set; }
     List<Guid> items;
 
-    private async void saveElementtoCart()
+    protected override async Task OnInitializedAsync()
     {
         var itemsarr = await storage.GetAsync<Guid[]>("cartitems");
         if (itemsarr.Success && itemsarr.Value is not null)
         {
             items = itemsarr.Value.ToList();
+            isadded=items.Contains(ItemID);
         }
         else
         {
             items = new List<Guid>();
         }
+    }
+
+    private async void saveElementtoCart()
+    {
         if (!items.Contains(ItemID))
         {
             items.Add(ItemID);

@@ -1,8 +1,11 @@
 ﻿
 <div class="product-card">
-    <div class="product-tumb">
-        <img src="@ProductImgURL" alt="">
-    </div>
+    <a class="h-100 w-100" href="/Details/@Id">
+        <div class="product-tumb">
+            <img src="@ProductImgURL" alt="">
+
+        </div>
+    </a>
     <div class="product-details">
         <span class="product-catagory mb-0">@Category - @ProductBrand</span>
         
@@ -10,7 +13,7 @@
         <p class="description">@Description</p>
         <div class="product-bottom-details">
             <div class="product-price">@if (OldPrice != 0)
-            {<small>@OldPrice $</small>} @Price $</div>
+            {<small>@OldPrice @Constants.Currency</small>} <p>@Price @Constants.Currency</p></div>
         </div>
     </div>
 </div>

@@ -1,0 +1,76 @@
+﻿@model OrderDetailsViewModel
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="py-4 border-top border-bottom row">
+    <div class="col-sm-4">
+        <p class="font-weight-bold">Order Date :</p>
+        <p class="text-secondary mb-0">@Model.Order.OrderDate</p>
+    </div>
+    <div class="col-sm-6">
+        <p class="font-weight-bold">Order Code :</p>
+        <p class="text-secondary mb-0">@Model.Order.Id</p>
+    </div>
+    <div class="col-sm-2">
+        <p class="font-weight-bold">Order State :</p>
+        <p class="text-secondary mb-0">@Model.Order.State</p>
+    </div>
+</div>
+
+<div class="py-4 border-bottom row">
+    <div class="col-sm-4"><p class="font-weight-bold">Client Name :</p></div>
+    <div class="col-sm-8 text-secondary"><p>@Model.Order.BuyerDetails.ClientName</p></div>
+
+    <div class="col-sm-4"><p class="font-weight-bold">Client Email :</p></div>
+    <div class="col-sm-8 text-secondary"><p>@Model.Order.BuyerDetails.Email</p></div>
+
+    <div class="col-sm-4"><p class="font-weight-bold">Phone Number :</p></div>
+    <div class="col-sm-8 text-secondary"><p>@Model.Order.OrderPhone</p></div>
+
+    <div class="col-sm-4"><p class="font-weight-bold mb-0">Delivery Address :</p></div>
+    <div class="col-sm-8 text-secondary"><p class="mb-0">@Model.Order.ShippingAddress</p></div>
+</div>
+
+<div class="py-4 border-bottom">
+    @foreach (var item in Model.OrderedProduct)
+    {
+        <div class="row mb-3">
+            <div class="col-sm-2">
+                <img class="w-100" src="/images/@item.ThumbnailURL" />
+            </div>
+            <div class="col-sm-8">
+                <small class="text-secondary">@item.Brand.Name</small>
+                <p class="font-weight-bold"><a href="@Url.Action("Details",new { Id=item.ID })">@item.Name</a></p>
+            </div>
+            <div class="col-sm-2 text-right">
+                <p>@item.Price @Constants.Currency</p>
+            </div>
+        </div>
+    }
+</div>
+<div class="py-4 text-right">
+    <p> Product Total : @Model.OrderedProduct.Sum(p => p.Price) @Constants.Currency</p>
+</div>
+@if (Model.Order.DeliveryIncluded)
+{
+    <div class="py-4 text-right">
+        <p> Delivery : @Constants.DeliveryFee @Constants.Currency</p>
+    </div>
+
+    <div class="py-4 text-right">
+        <p> Total : @Model.Order.Total @Constants.Currency</p>
+    </div>
+}
+<div class="p-4 border rounded shadow-sm">
+    <p class="mb-0">Payment Method : @Model.Order.BuyerDetails.PaymentMethod</p>
+    @if (!string.IsNullOrEmpty(Model.Order.BuyerDetails.PaymentEvidenceImg))
+    {
+        <img class="w-50" src="/images/@Model.Order.BuyerDetails.PaymentEvidenceImg" />
+    }
+</div>
+
+<!-- TODO : Payment Evidence Using Blazor -->
+<component type="typeof(ContinuePayment)" render-mode="Server"
+           param-Id="@Model.Order.BuyerDetails.ID"
+           param-orderid="@Model.Order.Id"/>

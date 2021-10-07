@@ -52,6 +52,18 @@ namespace InfiniTech.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
+            [Display(Name ="Full Name")]
+            public string FullName { get; set; }
+            
+            [Required]
+            [Display(Name ="Address")]
+            public string Address { get; set; }
+
+            [Required]
+            [Display(Name ="Phone Number")]
+            public string PhoneNumber { get; set; }
+
+            [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -75,7 +87,7 @@ namespace InfiniTech.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email,Address=Input.Address,PhoneNumber=Input.PhoneNumber,FullName = Input.FullName };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

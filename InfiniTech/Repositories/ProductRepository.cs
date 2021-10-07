@@ -27,7 +27,6 @@ namespace InfiniTech.Repositories
 
         public async Task AddProductAsync(Product product)
         {
-            product.DateAdded = DateTime.Now;
             await _context.Products.AddAsync(product);
         }
 
@@ -44,12 +43,14 @@ namespace InfiniTech.Repositories
         public Product GetProduct(Guid Productid)
         {
             return _context.Products.Include(p => p.Brand).Include(p => p.Category)
+                .Include(p=>p.ProductImages)
                     .FirstOrDefault(p=>p.ID == Productid);
         }
 
         public Task<Product> GetProductAsync(Guid Productid)
         {
             return _context.Products.Include(p => p.Brand).Include(p => p.Category)
+                .Include(p=>p.ProductImages)
                     .FirstOrDefaultAsync(p=>p.ID==Productid);
         }
 
@@ -62,7 +63,7 @@ namespace InfiniTech.Repositories
 
             var collection = _context.Products.OrderByDescending(p=>p.DateAdded).Include(p=>p.Brand).Include(p=>p.Category) as IQueryable<Product>;
             // Filtering By The Entered Details :
-
+            collection = parameters.ShowInvisible ? collection : collection.Where(p => p.isVisible);
             // By SearchTerm :
             collection = string.IsNullOrEmpty(parameters.SearchTerm) ? collection :
                             collection.Where(p =>
@@ -99,7 +100,7 @@ namespace InfiniTech.Repositories
 
         public async Task<IEnumerable<Product>> GetRandomProductsList()
         {
-            return await _context.Products.Take(4).ToListAsync();
+            return await _context.Products.Include(p=>p.Brand).Include(p=>p.Category).Take(4).ToListAsync();
         }
 
         public bool Save()

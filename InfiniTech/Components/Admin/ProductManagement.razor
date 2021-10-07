@@ -1,0 +1,121 @@
+﻿@inject IProductRepository repo
+@if (!Editing)
+{
+    <div class="row border-bottom p-2 m-1">
+        <div class="col-sm-1"><img class="w-100" src="/images/@ThumbnailUrl" /></div>
+        <div class="col-sm-3">@Name - @(isvisible?"Visible":"Not Visible")</div>
+        <div class="col-sm-2">@Price @Condition</div>
+        <div class="col-sm-3">@BrandName - @CategoryName</div>
+        <div class="col-sm-1">@Numberinstock</div>
+        <div class="col-sm-2">
+            <button @onclick="() => { Editing = true; }" class="btn btn-outline-warning">Edit</button>
+            <a href="@DeleteURL" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+}
+else
+{
+    <EditForm Model="Model" OnValidSubmit="ValidSubmit">
+        <ValidationSummary />
+        <DataAnnotationsValidator />
+        <div class="row p-2 m-1 bg-gradient-warning text-light rounded">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <input type="checkbox" @bind-value="Model.isVisible" checked="@isvisible" class="form-control-sm">
+                    <label>Is Visible</label>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group mb-0">
+                    <label>New Price</label>
+                    <input type="number" @bind-value="Model.NewPrice" step="any" class="form-control-sm">
+                </div>
+                <div class="form-group mb-0">
+                    <label>Condition</label>
+                    <select @bind="Model.Condition" class="form-control-sm">
+                        @foreach (var item in Enum.GetValues(typeof(ProductCondition)))
+                        {
+                            <option value="@item">
+                                @item
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label>Number In Stock</label>
+                    <input @bind-value="Model.NumberInStock" min="0" step="1" class="form-control-sm" type="number">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <button type="button" @onclick="()=> { Editing = false; }" class="btn btn-secondary">Cancel</button>
+                <button type="submit" class="btn btn-success">Save Changes</button>
+            </div>
+        </div>
+    </EditForm>
+}
+@code {
+    [Parameter]
+    public string DeleteURL { get; set; }
+    [Parameter]
+    public string DetailsURL { get; set; }
+    [Parameter]
+    public string Name { get; set; }
+    [Parameter]
+    public Guid ID { get; set; }
+    [Parameter]
+    public string ThumbnailUrl { get; set; }
+    [Parameter]
+    public ProductCondition Condition { get; set; }
+    [Parameter]
+    public double Price { get; set; }
+    [Parameter]
+    public string BrandName { get; set; }
+    [Parameter]
+    public string CategoryName { get; set; }
+    [Parameter]
+    public int Numberinstock { get; set; }
+    [Parameter]
+    public bool isvisible { get; set; }
+
+
+    public ProductEditDto Model { get; set; } = new();
+    public bool Editing { get; set; } = false;
+
+    protected override Task OnInitializedAsync()
+    {
+        Model = new()
+        {
+            Condition = Condition,
+            isVisible = isvisible,
+            NewPrice = Price,
+            NumberInStock = Numberinstock
+        };
+        return Task.CompletedTask;
+    }
+
+    public async Task ValidSubmit()
+    {
+        Editing = false;
+        var prod = await repo.GetProductAsync(ID);
+        prod.ProductCondition = Model.Condition;
+        prod.isVisible = Model.isVisible;
+        prod.NumberInStock = Model.NumberInStock;
+        if (prod.Price > Model.NewPrice)
+        {
+            prod.OldPrice = prod.Price;
+            prod.Price = Model.NewPrice;
+        }
+        else if (prod.Price < Model.NewPrice)
+        {
+            prod.Price = Model.NewPrice;
+        }
+        repo.UpdateProduct(prod);
+        await repo.SaveAsync();
+        Price = Model.NewPrice;
+        isvisible = Model.isVisible;
+        Condition = Model.Condition;
+        Numberinstock = Model.NumberInStock;
+    }
+}

@@ -1,0 +1,125 @@
+﻿@inject IProductRepository _repo
+@using Blazored.Typeahead
+
+@if (ComparedProducts.Count() < 6)
+{
+    <div class="text-center mb-5">
+        <h2>Search For Products To Compare</h2>
+        <BlazoredTypeahead SearchMethod="SearchProducts"
+                           @bind-Value="SelectedProduct"
+                           placeholder="Search by name...">
+            <SelectedTemplate>
+                @context.Name
+            </SelectedTemplate>
+            <ResultTemplate>
+                <div class="row">
+                    <div class="col-2">
+                        <img class="w-50" src="/images/@context.ThumbnailURL"/>
+                    </div>
+                    <div class="col-10 text-center">
+                        <p>@context.Name</p> <p>@context.Category.Name</p>
+                    </div>
+                </div>
+            </ResultTemplate>
+        </BlazoredTypeahead>
+        <button @onclick="AddSelectedProduct" class="m-1 p-2 btn btn-success">Compare Product</button>
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th></th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td class="col-sm-2">
+                @if (ComparedProducts.Count() > 1)
+                {
+                    <button @onclick="()=> { ComparedProducts.Remove(item); }" class="btn btn-danger">Remove Element</button>
+                }
+            </td>
+        }
+    </tr>
+    <tr>
+        <th></th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td class="col-sm-2">
+                <img height="64" src="/images/@item.ThumbnailURL" />
+            </td>
+        }
+    </tr>
+    <tr>
+        <th>Rating</th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td class="col-sm-2">
+                @item.rating/5 (@item.ratingnum)
+            </td>
+        }
+    </tr>
+    <tr>
+        <th>Name</th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td class="col-sm-2">
+                @item.Name
+            </td>
+        }
+    </tr>
+    <tr>
+        <th>Details</th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td class="col-sm-2">
+                <p>Cateogry : @item.Category.Name</p>
+                <p>Brand : @item.Brand.Name</p>
+                <p>Condition : @item.ProductCondition</p>
+                <p>Color : @item.Color</p>
+            </td>
+        }
+    </tr>
+    <tr>
+        <th>Description / Specs</th>
+        @foreach (var item in ComparedProducts)
+        {
+            <td class="col-sm-2">
+                @((MarkupString)item.Description)
+            </td>
+        }
+    </tr>
+</table>
+
+<div class="row">
+
+</div>
+
+
+
+
+@code {
+    [Parameter]
+    public Guid ID { get; set; }
+    public List<Product> ComparedProducts { get; set; } = new();
+
+    private Product SelectedProduct { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(ID != Guid.Empty)
+            ComparedProducts.Add(await _repo.GetProductAsync(ID));
+    }
+
+    private async Task<IEnumerable<Product>> SearchProducts(string searchText)
+    {
+        return await _repo.GetProductsList(new() { SearchTerm = searchText });
+    }
+
+
+    private Task AddSelectedProduct()
+    {
+        if(SelectedProduct!=null && !ComparedProducts.Contains(SelectedProduct))
+            ComparedProducts.Add(SelectedProduct);
+        return Task.CompletedTask;
+    }
+
+}

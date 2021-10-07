@@ -1,0 +1,159 @@
+﻿@inject ApplicationDbContext context
+@inject ProtectedLocalStorage storage
+@inject NavigationManager NavigationManager
+
+<div class="p-3">
+    <h3>Your Cart</h3>
+    <hr class="m-2" />
+    @if (cartitems is not null)
+    {
+        <div class="p-2">
+            @foreach (var item in cartitems)
+            {
+                <div class="row no-gutters mb-3 border-bottom">
+                    <div class="col-sm-2">
+                        <img src="/images/@item.ThumbnailURL" class="w-100" alt="@item.Name">
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        <p>@item.Price @Constants.Currency</p>
+                    </div>
+                    <div class="col-sm-1 p-2">
+                        <button class="btn btn-danger my-auto" @onclick="() => Deleteitem(item.ID)"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    <hr class="m-2" />
+    <div class="p-2 row">
+        <div class="col-sm-8">
+            <EditForm Model="@Details" OnValidSubmit="@CreateAnOrder">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Full Name</label>
+                    <div class="col-sm-10">
+                        <input disabled="@isUserLoggedIn" type="text" @bind-value="Details.ClientName" class="form-control" id="inputEmail3">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-sm-10">
+                        <input disabled="@isUserLoggedIn" type="email" @bind-value="Details.Email" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Shipping Address</label>
+                    <div class="col-sm-10">
+                        <input type="text" required="@delivery" @bind-value="address" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Phone Number</label>
+                    <div class="col-sm-10">
+                        <input type="tel" required @bind-value="phoneNumber" class="form-control">
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="submit">Order</button>
+            </EditForm>
+        </div>
+        <div class="col-sm-3 text-right">
+            <p>Products : @cartitems.Sum(p => p.Price) @Constants.Currency</p>
+            <div>
+                Get Products Delivered
+                <input type="checkbox" @bind-value="delivery" />
+            </div>
+            <p>Total : @(cartitems.Sum(p => p.Price) + (delivery ? Constants.DeliveryFee : 0)) @Constants.Currency</p>
+        </div>
+    </div>
+
+</div>
+@code {
+    [Parameter]
+    public bool isUserLoggedIn { get; set; }
+    [Parameter]
+    public string UserID { get; set; }
+
+    public BuyerDetails Details { get; set; } = new(){PaymentMethod=PaymentMethod.Hand_to_Hand};
+    public string address { get; set; } = "";
+    public string phoneNumber { get; set; } = "";
+
+    [Parameter]
+    public string RedirectURL { get; set; }
+
+    public bool delivery { get; set; }
+    List<Guid> items;
+    public List<Product> cartitems = new List<Product>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var itemsarr = await storage.GetAsync<Guid[]>("cartitems");
+        if (itemsarr.Success && itemsarr.Value is not null)
+        {
+            items = itemsarr.Value.ToList();
+            foreach (var item in items)
+            {
+                if (cartitems.Where(p => p.ID == item).Count() == 0)
+                    cartitems.Add(context.Products.Find(item));
+            }
+        }
+        else
+        {
+            items = new List<Guid>();
+        }
+        if (isUserLoggedIn)
+        {
+            var usr = await context.Users.FindAsync(UserID);
+            Details = new BuyerDetails
+            {
+                ClientName = usr.FullName,
+                Email = usr.Email,
+            };
+            address = usr.Address;
+            phoneNumber = usr.PhoneNumber;
+        }
+    }
+
+    private async void Deleteitem(Guid itemid)
+    {
+        items.Remove(itemid);
+        cartitems.Remove(cartitems.Where(p => p.ID == itemid).FirstOrDefault());
+        await storage.SetAsync("cartitems", items);
+        await OnInitializedAsync();
+    }
+
+    private async void CreateAnOrder()
+    {
+        if (items.Count() > 0)
+        {
+            var order = new Order()
+            {
+                Id = Guid.NewGuid(),
+                OrderDate = DateTime.Now,
+                UserID = isUserLoggedIn ? UserID : null,
+                OrderedProducts = new(),
+                State = DeliveryState.JustCreated,
+                Total = cartitems.Sum(p => p.Price) + (delivery ? Constants.DeliveryFee : 0),
+                OrderPhone = phoneNumber,
+                ShippingAddress = address,
+                BuyerDetails = Details,
+                DeliveryIncluded = delivery
+            };
+            cartitems.ForEach(p => order.OrderedProducts.Add(new() { ProductId = p.ID, Product = p }));
+
+            context.Add(order);
+            await context.SaveChangesAsync();
+
+            await storage.SetAsync("cartitems", null);
+            items = new List<Guid>() { };
+            cartitems = new List<Product>() { };
+            NavigationManager.NavigateTo("/OrderDetails/" + order.Id, forceLoad: true);
+        }
+
+    }
+}

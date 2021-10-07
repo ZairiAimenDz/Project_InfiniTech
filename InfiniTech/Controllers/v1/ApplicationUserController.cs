@@ -41,8 +41,7 @@ namespace InfiniTech.Controllers.v1
             var appUser = new ApplicationUser()
             {
                 Email = user.Email,
-                FirstName = user.FirstName,
-                FamilyName = user.FamilyName,
+                FullName = user.FullName,
                 Address = user.Address,
                 UserName = user.Email
             };

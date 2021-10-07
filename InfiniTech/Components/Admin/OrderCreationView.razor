@@ -1,22 +1,64 @@
 ﻿@inject ApplicationDbContext _context
-@inject IProductRepository Productrepo 
+@inject IProductRepository Productrepo
+@inject IFileManager fileManager
+@inject NavigationManager navMng
 <h3>Create A New Order</h3>
+
+<div class="my-3 p-3 bg-white">
+    <h3>Add Products To The Order</h3>
+    <input class="form-control mb-2" @onchange="OnSearchTermChange" />
+    <div class="row">
+        @foreach (var item in SearchResults)
+        {
+            <div class="col-sm-2">
+                <img height="32" src="/images/@item.ThumbnailURL" />
+                <p>@item.Name - @item.Price  @Constants.Currency</p>
+                <button class="btn btn-success" @onclick="() => { OrderedProducts.Add(new() { Product = item, ProductId = item.ID }); }">Add To List</button>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="p-3 my-3 bg-white">
+    <h2>Ordered Products :</h2>
+    <div class="row">
+        @foreach (var item in OrderedProducts)
+        {
+            <div class="col-sm-6 row">
+                <div class="col-3">
+                    <img class="w-100" src="/images/@item.Product.ThumbnailURL" />
+                </div>
+                <div class="col-5">
+                    @item.Product.Name - @item.Product.Price @Constants.Currency
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-danger" @onclick="()=> { OrderedProducts.Remove(item); }">Remove</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="bg-white p-3 my-3">
+    <h3>Total : @OrderedProducts.Sum(o => o.Product.Price) @Constants.Currency</h3>
+</div>
 
 <EditForm Model="@OrderModel" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div class="bg-white p-3">
+
+    <div class="bg-white p-3 my-3">
         <h2>Buyer Details</h2>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-10">
-                <input type="email" @bind-value="OrderModel.BuyerDetails.Email" class="form-control">
+                <input type="email" required @bind-value="OrderModel.BuyerDetails.Email" class="form-control">
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Full Name</label>
             <div class="col-sm-10">
-                <input type="text" @bind-value="OrderModel.BuyerDetails.ClientName" class="form-control">
+                <input type="text" required @bind-value="OrderModel.BuyerDetails.ClientName" class="form-control">
             </div>
         </div>
         <div class="form-group row">
@@ -25,30 +67,89 @@
                 <input type="text" @bind-value="OrderModel.ShippingAddress" class="form-control">
             </div>
         </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Order Phone</label>
+            <div class="col-sm-10">
+                <input type="tel" @bind-value="OrderModel.OrderPhone" class="form-control">
+            </div>
+        </div>
     </div>
     <div class="my-3 p-3 bg-white">
         <h2>Payment Details</h2>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Payment Method</label>
             <div class="col-sm-10">
-                <input type="email" @bind-value="OrderModel.BuyerDetails.Email" class="form-control">
+                <InputSelect @bind-Value="@OrderModel.BuyerDetails.PaymentMethod" class="form-control">
+                    @foreach (var item in Enum.GetValues(typeof(PaymentMethod)))
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </InputSelect>
             </div>
-        </div>        
+        </div>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Payment Method</label>
             <div class="col-sm-10">
-                <input type="file" @bind-value="OrderModel.BuyerDetails.PaymentEvidence" class="form-control">
+                <InputFile OnChange="@OnInputFileChange" class="form-control" />
+            </div>
+        </div>
+        <img class="w-50" src="@ImageDataURL" />
+    </div>
+    <div class="my-3 p-3 bg-white">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Order State</label>
+            <div class="col-sm-10">
+                <InputSelect @bind-Value="@OrderModel.State" class="form-control">
+                    @foreach (var item in Enum.GetValues(typeof(DeliveryState)))
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </InputSelect>
             </div>
         </div>
     </div>
-
+    <button type="submit" class="btn btn-primary">Create Order</button>
 </EditForm>
 
 @code {
-    public Order OrderModel { get; set; } = new Order { BuyerDetails = new(), OrderedProducts = new() };
-    public List<Product> OrderedProducts { get; set; }
-    public void OnValidSubmit()
-    {
+    [Parameter]
+    public string returnurl { get; set; }
 
+    public Order OrderModel { get; set; } = new Order { BuyerDetails = new(), OrderedProducts = new() };
+    public HashSet<OrderedProduct> OrderedProducts { get; set; } = new();
+    public List<Product> SearchResults { get; set; } = new();
+    public string searchterm { get; set; }
+    public IBrowserFile ImageFile { get; set; }
+    public string ImageDataURL { get; set; }
+    public async Task OnValidSubmit()
+    {
+        if (OrderedProducts.Count() > 0)
+        {
+            OrderModel.OrderedProducts = OrderedProducts.ToList();
+            OrderModel.OrderDate = DateTime.Now;
+            OrderModel.BuyerDetails.PaymentEvidenceImg = await fileManager.UploadImage(ImageFile);
+            OrderModel.Total = OrderedProducts.Sum(o => o.Product.Price);
+            _context.Orders.Add(OrderModel);
+            /// TODO : Send Email To The Receiver
+            await _context.SaveChangesAsync();
+            navMng.NavigateTo(returnurl);
+        }
+    }
+
+    public async Task OnSearchTermChange(ChangeEventArgs args)
+    {
+        var value = (string)args.Value;
+        SearchResults = await Productrepo.GetProductsList(new() { SearchTerm = value, PageSize = 10 });
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var format = "image/png";
+        ImageFile = e.GetMultipleFiles().FirstOrDefault();
+        var resized = await ImageFile.RequestImageFileAsync(format,
+            500, 500);
+        var buffer = new byte[resized.Size];
+        await resized.OpenReadStream().ReadAsync(buffer);
+        ImageDataURL = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
     }
 }

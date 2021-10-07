@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -45,6 +46,24 @@ namespace InfiniTech.Repositories
                 }
             }
             return Task.FromResult(uniqueFileName);
+        }
+
+        public async Task<string> UploadImage(IBrowserFile bfile)
+        {
+            string uniqueFileName = null;
+            var file = bfile.OpenReadStream(maxAllowedSize: 4096000);
+
+            if (file is not null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + bfile.Name;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+            }
+            return uniqueFileName;
         }
     }
 }

@@ -16,14 +16,13 @@ namespace Domain
         public string ClientName { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public string PaymentEvidenceImg { get; set; }
-        [NotMapped]
-        public IFormFile PaymentEvidence{ get; set; }
     }
 
     public enum PaymentMethod
     {
-        Bank_Check,
         CCP,
-        Hand_to_Hand
+        Hand_to_Hand,
+        Payment_On_Delivery,
+        CheckOut_At_Store
     }
 }
